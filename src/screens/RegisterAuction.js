@@ -10,7 +10,7 @@ export default function RegisterAuction() {
 		{ value: 'gold', label: 'Gold', image:'/img/gold.png'},
 		{ value: 'platinum', label: 'Platinum', image:'/img/platinum.png'},
 		{ value: 'diamond', label: 'Diamond', image:'/img/diamond.png'},
-		{ value: 'mater', label: 'mater', image:'/img/mater.png' },
+		{ value: 'mater', label: 'mater', image:'/img/master.png' },
 		{ value: 'grandmater', label: 'Grandmater', image:'/img/grandmater.png'},
 		{ value: 'challenger', label: 'Challenger', image:'/img/challenger.png'},
 	  ]
