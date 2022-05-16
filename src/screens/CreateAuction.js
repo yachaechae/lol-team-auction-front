@@ -9,10 +9,16 @@ export default function CreateAuction() {
                 </h1>
                 <div className="form">
                     <div className="form-group">
-                        <div className="input-title">팀 수</div>
+                        <div className="input-title">팀        수</div>
                         <input type="text" placeholder="숫자만 입력해주세요!"></input>
                     </div>
-                    <button className="btn-border">설정 완료</button>
+                    <div className="form-group">
+                        <div className="input-title">기본경매포인트</div>
+                        <input type="text" placeholder="숫자만 입력해주세요!"></input>
+                    </div>
+                    <div>
+                        <button className="btn-border">설정 완료</button>
+                    </div>
                 </div>
             </div>
         </div>
