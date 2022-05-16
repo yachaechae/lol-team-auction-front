@@ -1,5 +1,6 @@
 import React from 'react'
 import Select from 'react-select'
+import axios from 'axios'
 
 export default function RegisterAuction() {
 
@@ -21,6 +22,30 @@ export default function RegisterAuction() {
 			backgroundColor: 'transparent',
 		})
 	}
+
+const champions = 
+		axios({
+			method: 'get',
+			url: 'https://ddragon.leagueoflegends.com/cdn/12.9.1/data/ko_KR/champion.json'
+		}).then((res)=>{
+			console.log(res.data.data)
+			console.log(Object.keys(res.data.data))
+			const champion = Object.keys(res.data.data).map((championinfo) => {
+				// console.log(res.data.data[championinfo].version);
+				// console.log(res.data.data[championinfo].id);
+				// console.log(res.data.data[championinfo].name);
+				return {
+					version: res.data.data[championinfo].version,
+					id : res.data.data[championinfo].id,
+					name : res.data.data[championinfo].name
+				}
+			})
+			console.log(champion)
+		})
+
+	// 1. 챔피언 전체 id 값 가져오기
+	// 2. map 함수로 id 값 통해서 챔피언 이미지 가져오기
+	// http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/ id값.png
 
 	return (
 		<div className="create register">
@@ -67,6 +92,8 @@ export default function RegisterAuction() {
 						<div className="input-title">MOST 3</div>
 						<input type="text" placeholder="롤 닉네임을 입력해주세요"></input>
 					</div>
+					
+					<img src=""/>
 
 					<button className="btn-border">설정 완료</button>
 				</div>
