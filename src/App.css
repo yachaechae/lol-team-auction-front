@@ -216,7 +216,8 @@
 .create .container .form .form-group .input-title{
     font-family: 'locus_sangsang';
     font-size: 1.5em;
-    letter-spacing: 1em;
+    letter-spacing: 0.1em;
+    word-spacing: 4.2em;
 }
 
 
@@ -292,4 +293,22 @@
     letter-spacing: 0.1em;
     text-align: left;
     width: 20%;
+    word-spacing: 0;
+}
+
+/* 선수등록부분 티어선택 */
+.register .container .form .form-group .tier-option{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 54%;
+}
+.register .container .form .form-group .tier-option .tier-img{
+    height: 5vh;
+}
+.register .container .form .form-group .tier-option .tier-radio input[type="radio"]{
+    width: auto;    
+    margin: 0 0.3em 0 0.8em;
+
 }

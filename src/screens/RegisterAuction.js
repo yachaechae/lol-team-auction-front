@@ -14,7 +14,13 @@ export default function RegisterAuction() {
 		{ value: 'grandmater', label: 'Grandmater', image:'/img/grandmater.png'},
 		{ value: 'challenger', label: 'Challenger', image:'/img/challenger.png'},
 	  ]
-	  
+
+	const selectStyles = {
+		control: (provided) => ({
+			...provided,
+			backgroundColor: 'transparent',
+		})
+	}
 
 	return (
 		<div className="create register">
@@ -29,15 +35,25 @@ export default function RegisterAuction() {
 					</div>
 					<div className="form-group">
 						<div className="input-title">최고티어</div>
-						<Select 
-							options={ranktier} 
-							formatOptionLabel={tier => (
-								<div className="tier-option">
-									<img src={tier.image} alt={tier.image}/>
-									<span>{tier.label}</span>
-								</div>
-							)}
-						/>
+						<div className='tier-option'>
+							<Select
+								styles={selectStyles}
+								placeholder='티어를 선택해주세요'
+								options={ranktier} 
+								formatOptionLabel={tier => (
+									<div>
+										<img src={tier.image} alt={tier.image} className="tier-img"/>
+									</div>
+								)}
+							/>
+							<div className="tier-radio">
+								<input type="radio" value="1" name="1"/>1
+								<input type="radio" value="2" name="2"/>2
+								<input type="radio" value="3" name="3"/>3
+								<input type="radio" value="4" name="4"/>4
+							</div>
+						</div>
+						
 					</div>
 					<div className="form-group">
 						<div className="input-title">주 라인</div>
