@@ -38,10 +38,6 @@ export default function RegisterAuction() {
 			maxWidth: '195px',
 			width: '100%',
 		}),
-		control: (provided) => ({
-			...provided,
-			backgroundColor: 'transparent',
-		}),
 		placeholder: (provided) => ({
 			...provided,
 			fontSize: '15px',
