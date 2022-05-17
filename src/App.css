@@ -211,6 +211,7 @@
     width: 70%;
     margin: 0 auto 1em;
     align-items: center;
+    min-height: 7vh;
 }
 
 .create .container .form .form-group .input-title{
@@ -231,6 +232,7 @@
     border-radius: 5px;
     border: 1px solid #cdcdcd;
     padding: 0.2em 0.5em;
+    min-height: 36px;
 }
 
 .create .container .form .form-group input::placeholder{
@@ -309,7 +311,7 @@
 .register .container .form .form-group .tier-option{
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
 }
 .register .container .form .form-group .tier-option .tier-img{
@@ -323,7 +325,23 @@
 .register .container .form .form-group .tier-option .tier-radio input[type="radio"]{
     width: auto;    
     margin: 0 0.3em 0 0.8em;
-
+    min-height:10px;
+}
+.register .container .form .form-group .position{
+    display: flex;
+    justify-content: space-between;
+}
+.register .container .form .form-group .position .position-radio{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.register .container .form .form-group .position .position-radio input[type="radio"]{
+    margin: 0 0 0.3em 0;
+    min-height:10px;
+}
+.register .container .form .form-group .position .position-radio img{
+    max-width: 40px;
 }
 .register .container .form .form-group .champion-opction .champions-img{
     max-width: 35px;

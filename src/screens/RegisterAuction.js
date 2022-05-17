@@ -2,26 +2,42 @@ import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 import axios from 'axios'
 
+const TIER_IMG_PATH = "/img/tier";
+const POSITION_IMG_PATH = "/img/position";
 export default function RegisterAuction() {
 	
+	const [userName, setUserName] = useState()
+	const [tier, setTier] = useState('Iron')
+	const [tierNum, setTierNum] = useState()
+	const [position, setPosition] = useState()
+	const [subposition, setSubposition] = useState()
 	const [champions, setChampions] = useState([])
 	const [most, setMost] = useState([])
 
+	const updateUserName = (data) => {
+		setUserName(data.target.value)
+	}
+
 	// 랭크티어 이미지 정보
 	const ranktier = [
-		{ value: 'iron', label: 'Iron', image: '/img/iron.png'},
-		{ value: 'bronze', label: 'Bronze', image:'/img/bronze.png'},
-		{ value: 'silver', label: 'Silver', image:'/img/silver.png'},
-		{ value: 'gold', label: 'Gold', image:'/img/gold.png'},
-		{ value: 'platinum', label: 'Platinum', image:'/img/platinum.png'},
-		{ value: 'diamond', label: 'Diamond', image:'/img/diamond.png'},
-		{ value: 'mater', label: 'mater', image:'/img/master.png' },
-		{ value: 'grandmater', label: 'Grandmater', image:'/img/grandmater.png'},
-		{ value: 'challenger', label: 'Challenger', image:'/img/challenger.png'},
+		{ value: 'iron', label: 'Iron', image: `${TIER_IMG_PATH}/iron.png`},
+		{ value: 'bronze', label: 'Bronze', image:`${TIER_IMG_PATH}/bronze.png`},
+		{ value: 'silver', label: 'Silver', image:`${TIER_IMG_PATH}/silver.png`},
+		{ value: 'gold', label: 'Gold', image:`${TIER_IMG_PATH}/gold.png`},
+		{ value: 'platinum', label: 'Platinum', image:`${TIER_IMG_PATH}/platinum.png`},
+		{ value: 'diamond', label: 'Diamond', image:`${TIER_IMG_PATH}/diamond.png`},
+		{ value: 'master', label: 'Master', image:`${TIER_IMG_PATH}/master.png` },
+		{ value: 'grandmaster', label: 'Grandmaster', image:`${TIER_IMG_PATH}/grandmaster.png`},
+		{ value: 'challenger', label: 'Challenger', image:`${TIER_IMG_PATH}/challenger.png`},
 	  ]
 
 	// 랭크 셀렉트 박스 css 설정
 	const tierStyles = {
+		container:(provided)=> ({
+			...provided,
+			maxWidth: '195px',
+			width: '100%',
+		}),
 		control: (provided) => ({
 			...provided,
 			backgroundColor: 'transparent',
@@ -32,6 +48,22 @@ export default function RegisterAuction() {
 			fontFamily: 'SCoreDream',
 			textAlign: 'left',
 		})
+	}
+	//티어 정보 업데이트
+	const updateTier = (data) => {
+		setTier(data.label)
+	}
+	const updateTierNum = (data) => {
+		setTierNum(data.target.value)
+	}
+
+	//포지션 정보 업데이트
+	const updatePosition = (data) => {
+		setPosition(data.target.value)
+	}
+
+	const updateSubposition = (data) => {
+		setSubposition(data.target.value)
 	}
 
 	//챔피언 정보 가져오기
@@ -101,7 +133,7 @@ export default function RegisterAuction() {
 		})
 	}	
 
-	const updateMost = (data, action) => {
+	const updateMost = (data) => {
 		if (data.length > 3) {
 			alert("3개만 선택해주세요")
 			return
@@ -109,6 +141,7 @@ export default function RegisterAuction() {
 		setMost(data)
 
 	}
+
 
 	return (
 		<div className="create register">
@@ -120,7 +153,7 @@ export default function RegisterAuction() {
 					<div className="form-group">
 						<div className="input-title">롤 닉네임</div>
 						<div className="input-box">
-							<input type="text" placeholder="롤 닉네임을 입력해주세요"></input>
+							<input type="text" placeholder="롤 닉네임을 입력해주세요" onChange={updateUserName}></input>
 						</div>
 
 					</div>
@@ -129,8 +162,9 @@ export default function RegisterAuction() {
 						<div className='input-box tier-option'>
 							<Select
 								styles={tierStyles}
-								placeholder='티어를 선택해주세요'
 								options={ranktier} 
+								onChange={updateTier}
+								placeholder='티어를 선택해주세요'
 								formatOptionLabel={tier => (
 									<div>
 										<img src={tier.image} alt={tier.image} className="tier-img"/>
@@ -138,24 +172,62 @@ export default function RegisterAuction() {
 								)}
 							/>
 							<div className="tier-radio">
-								<input type="radio" value="1" name="1"/>1
-								<input type="radio" value="2" name="2"/>2
-								<input type="radio" value="3" name="3"/>3
-								<input type="radio" value="4" name="4"/>4
+								<input type="radio" value="1" name="tier" onChange={updateTierNum}/>1
+								<input type="radio" value="2" name="tier" onChange={updateTierNum}/>2
+								<input type="radio" value="3" name="tier" onChange={updateTierNum}/>3
+								<input type="radio" value="4" name="tier" onChange={updateTierNum}/>4
 							</div>
 						</div>
 						
 					</div>
 					<div className="form-group">
 						<div className="input-title">주 라인</div>
-						<div className="input-box">
-							<input type="text" placeholder="주 라인을 입력해주세요"></input>
+						<div className="input-box position">
+							<div className="position-radio">
+								<input type="radio" value="Top" name="position" onChange={updatePosition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Top.png`}/>
+							</div>							
+							<div className="position-radio">
+								<input type="radio" value="Jungle" name="position" onChange={updatePosition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Jungle.png`}/>
+							</div>							
+							<div className="position-radio">
+								<input type="radio" value="Mid" name="position" onChange={updatePosition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Mid.png`}/>
+							</div>							
+							<div className="position-radio">
+								<input type="radio" value="Bot" name="position" onChange={updatePosition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Bot.png`}/>
+							</div>							
+							<div className="position-radio">
+								<input type="radio" value="Support" name="position" onChange={updatePosition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Support.png`}/>
+							</div>
 						</div>
 					</div>
 					<div className="form-group">
 						<div className="input-title">부 라인</div>
-						<div className="input-box">
-							<input type="text" placeholder="부 라인을 입력해주세요"></input>
+						<div className="input-box position">
+							<div className="position-radio">
+								<input type="radio" value="Top" name="subPosition" onChange={updateSubposition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Top.png`}/>
+							</div>							
+							<div className="position-radio">
+								<input type="radio" value="Jungle" name="subPosition" onChange={updateSubposition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Jungle.png`}/>
+							</div>							
+							<div className="position-radio">
+								<input type="radio" value="Mid" name="subPosition" onChange={updateSubposition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Mid.png`}/>
+							</div>							
+							<div className="position-radio">
+								<input type="radio" value="Bot" name="subPosition" onChange={updateSubposition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Bot.png`}/>
+							</div>							
+							<div className="position-radio">
+								<input type="radio" value="Support" name="subPosition" onChange={updateSubposition}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Support.png`}/>
+							</div>
 						</div>
 					</div>
 					<div className="form-group">
@@ -164,10 +236,10 @@ export default function RegisterAuction() {
 							<Select
 								value={most}
 								closeMenuOnSelect={false}
-								onChange={updateMost}
+								isMulti={true}
 								styles={championStyles}
 								options={champions} 
-								isMulti={true}
+								onChange={updateMost}
 								placeholder="챔피언을 선택해주세요"
 								formatOptionLabel={champions => (
 									<img src={champions.image} alt={champions.image} className="champions-img"/>
