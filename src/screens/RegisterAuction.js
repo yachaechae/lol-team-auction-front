@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 import axios from 'axios'
 
 export default function RegisterAuction() {
+	
+	const [champions, setChampions] = useState([])
+	const [most, setMost] = useState([])
 
+	// 랭크티어 이미지 정보
 	const ranktier = [
 		{ value: 'iron', label: 'Iron', image: '/img/iron.png'},
 		{ value: 'bronze', label: 'Bronze', image:'/img/bronze.png'},
@@ -16,36 +20,95 @@ export default function RegisterAuction() {
 		{ value: 'challenger', label: 'Challenger', image:'/img/challenger.png'},
 	  ]
 
-	const selectStyles = {
+	// 랭크 셀렉트 박스 css 설정
+	const tierStyles = {
 		control: (provided) => ({
 			...provided,
 			backgroundColor: 'transparent',
+		}),
+		placeholder: (provided) => ({
+			...provided,
+			fontSize: '15px',
+			fontFamily: 'SCoreDream',
+			textAlign: 'left',
 		})
 	}
 
-const champions = 
+	//챔피언 정보 가져오기
+	useEffect(() => {
+		getChampionInfo();
+	},[])
+
+	const getChampionInfo = () => {
 		axios({
 			method: 'get',
 			url: 'https://ddragon.leagueoflegends.com/cdn/12.9.1/data/ko_KR/champion.json'
 		}).then((res)=>{
-			console.log(res.data.data)
-			console.log(Object.keys(res.data.data))
-			const champion = Object.keys(res.data.data).map((championinfo) => {
-				// console.log(res.data.data[championinfo].version);
-				// console.log(res.data.data[championinfo].id);
-				// console.log(res.data.data[championinfo].name);
+			const champion = Object.keys(res.data.data).map((championinfo) => {				
 				return {
-					version: res.data.data[championinfo].version,
-					id : res.data.data[championinfo].id,
-					name : res.data.data[championinfo].name
+					value : res.data.data[championinfo].name,
+					label : res.data.data[championinfo].name,
+					image : `http://ddragon.leagueoflegends.com/cdn/${res.data.data[championinfo].version}/img/champion/${res.data.data[championinfo].id}.png`
 				}
 			})
-			console.log(champion)
+			champion.sort((current, next) =>{
+				return current.label < next.label ? -1 : current.label > next.label ? 1 : 0
+			})
+			setChampions(champion)
 		})
 
-	// 1. 챔피언 전체 id 값 가져오기
-	// 2. map 함수로 id 값 통해서 챔피언 이미지 가져오기
-	// http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/ id값.png
+	}
+	// 챔피언 셀렉트 박스 css 설정
+	const championStyles = {
+		control: (provided) => ({
+			...provided,
+			width: '106%',
+		}),
+		placeholder: (provided) => ({
+			...provided,
+			fontSize: '15px',
+			fontFamily: 'SCoreDream',
+			textAlign: 'left',
+		}),
+		menu: (provided) => ({
+			...provided,
+			width: '106%',
+		}),
+		menuList: (provided) => ({
+			...provided,
+			textAlign: 'left',
+			"::-webkit-scrollbar" : {
+				width: '8px',  
+			},			
+			"::-webkit-scrollbar-thumb" : {
+				height: '30%',
+				background: '#595959',			
+				borderRadius: '10px',
+			},
+			"::-webkit-scrollbar-thumb:hover": {
+				background: "#717171"
+			  },
+			"::-webkit-scrollbar-track" : {
+				background: '#D9D9D9', 
+			}
+			
+
+		}),
+		option: (provided) => ({
+			...provided,
+			display: 'inline-block',
+			width: '75px',
+		})
+	}	
+
+	const updateMost = (data, action) => {
+		if (data.length > 3) {
+			alert("3개만 선택해주세요")
+			return
+		}
+		setMost(data)
+
+	}
 
 	return (
 		<div className="create register">
@@ -56,13 +119,16 @@ const champions =
 				<div className="form">
 					<div className="form-group">
 						<div className="input-title">롤 닉네임</div>
-						<input type="text" placeholder="롤 닉네임을 입력해주세요"></input>
+						<div className="input-box">
+							<input type="text" placeholder="롤 닉네임을 입력해주세요"></input>
+						</div>
+
 					</div>
 					<div className="form-group">
 						<div className="input-title">최고티어</div>
-						<div className='tier-option'>
+						<div className='input-box tier-option'>
 							<Select
-								styles={selectStyles}
+								styles={tierStyles}
 								placeholder='티어를 선택해주세요'
 								options={ranktier} 
 								formatOptionLabel={tier => (
@@ -82,22 +148,36 @@ const champions =
 					</div>
 					<div className="form-group">
 						<div className="input-title">주 라인</div>
-						<input type="text" placeholder="주 라인을 입력해주세요"></input>
+						<div className="input-box">
+							<input type="text" placeholder="주 라인을 입력해주세요"></input>
+						</div>
 					</div>
 					<div className="form-group">
 						<div className="input-title">부 라인</div>
-						<input type="text" placeholder="부 라인을 입력해주세요"></input>
+						<div className="input-box">
+							<input type="text" placeholder="부 라인을 입력해주세요"></input>
+						</div>
 					</div>
 					<div className="form-group">
 						<div className="input-title">MOST 3</div>
-						<input type="text" placeholder="롤 닉네임을 입력해주세요"></input>
+						<div className="input-box champion-opction">
+							<Select
+								value={most}
+								closeMenuOnSelect={false}
+								onChange={updateMost}
+								styles={championStyles}
+								options={champions} 
+								isMulti={true}
+								placeholder="챔피언을 선택해주세요"
+								formatOptionLabel={champions => (
+									<img src={champions.image} alt={champions.image} className="champions-img"/>
+								)}
+							/>
+						</div>
 					</div>
-					
-					<img src=""/>
-
 					<button className="btn-border">설정 완료</button>
 				</div>
 			</div>
 		</div>
-	)
+	) 
 }
