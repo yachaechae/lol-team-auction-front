@@ -168,10 +168,18 @@ export default function RegisterAuction() {
 								)}
 							/>
 							<div className="tier-radio">
-								<input type="radio" value="1" name="tier" onChange={updateTierNum}/>1
-								<input type="radio" value="2" name="tier" onChange={updateTierNum}/>2
-								<input type="radio" value="3" name="tier" onChange={updateTierNum}/>3
-								<input type="radio" value="4" name="tier" onChange={updateTierNum}/>4
+								<label>
+									<input type="radio" value="1" name="tier" onChange={updateTierNum}/>1
+								</label>
+								<label>
+									<input type="radio" value="2" name="tier" onChange={updateTierNum}/>2
+								</label>
+								<label>
+									<input type="radio" value="3" name="tier" onChange={updateTierNum}/>3
+								</label>
+								<label>
+									<input type="radio" value="4" name="tier" onChange={updateTierNum}/>4
+								</label>
 							</div>
 						</div>
 						
@@ -179,51 +187,51 @@ export default function RegisterAuction() {
 					<div className="form-group">
 						<div className="input-title">주 라인</div>
 						<div className="input-box position">
-							<div className="position-radio">
+							<label className="position-radio">
 								<input type="radio" value="Top" name="position" onChange={updatePosition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Top.png`}/>
-							</div>							
-							<div className="position-radio">
+							</label>							
+							<label className="position-radio">
 								<input type="radio" value="Jungle" name="position" onChange={updatePosition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Jungle.png`}/>
-							</div>							
-							<div className="position-radio">
+							</label>							
+							<label className="position-radio">
 								<input type="radio" value="Mid" name="position" onChange={updatePosition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Mid.png`}/>
-							</div>							
-							<div className="position-radio">
+							</label>							
+							<label className="position-radio">
 								<input type="radio" value="Bot" name="position" onChange={updatePosition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Bot.png`}/>
-							</div>							
-							<div className="position-radio">
+							</label>							
+							<label className="position-radio">
 								<input type="radio" value="Support" name="position" onChange={updatePosition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Support.png`}/>
-							</div>
+							</label>
 						</div>
 					</div>
 					<div className="form-group">
 						<div className="input-title">부 라인</div>
 						<div className="input-box position">
-							<div className="position-radio">
+							<label className="position-radio">
 								<input type="radio" value="Top" name="subPosition" onChange={updateSubposition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Top.png`}/>
-							</div>							
-							<div className="position-radio">
+							</label>							
+							<label className="position-radio">
 								<input type="radio" value="Jungle" name="subPosition" onChange={updateSubposition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Jungle.png`}/>
-							</div>							
-							<div className="position-radio">
+							</label>							
+							<label className="position-radio">
 								<input type="radio" value="Mid" name="subPosition" onChange={updateSubposition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Mid.png`}/>
-							</div>							
-							<div className="position-radio">
+							</label>							
+							<label className="position-radio">
 								<input type="radio" value="Bot" name="subPosition" onChange={updateSubposition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Bot.png`}/>
-							</div>							
-							<div className="position-radio">
+							</label>							
+							<label className="position-radio">
 								<input type="radio" value="Support" name="subPosition" onChange={updateSubposition}/>
 								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Support.png`}/>
-							</div>
+							</label>
 						</div>
 					</div>
 					<div className="form-group">
