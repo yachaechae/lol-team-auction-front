@@ -77,7 +77,7 @@
     justify-content: space-evenly;
 }
 
-.home .button-box a.btn{
+.home .button-box .btn{
     font-size: 30px;
     background:none;
     border: none;
@@ -87,14 +87,14 @@
     text-decoration: none;
 }
 
-.home .button-box a.btn-border{    
+.home .button-box .btn-border{    
     box-shadow: inset 0 0 0 4px #fff;
     color: #fff;
     transition: color 0.25s 0.0833333333s;
     position: relative;
 }
-.home .button-box a.btn-border::before,
-.home .button-box a.btn-border::after{
+.home .button-box .btn-border::before,
+.home .button-box .btn-border::after{
     border: 0 solid transparent;
     box-sizing: border-box;
     content: "";
@@ -105,66 +105,66 @@
     bottom: 0;
     right: 0;
 }
-.home .button-box a.btn-border::before{
+.home .button-box .btn-border::before{
     border-bottom-width: 4px;
     border-left-width: 4px;
 }
-.home .button-box a.btn-border::after{
+.home .button-box .btn-border::after{
     border-top-width: 4px;
     border-right-width: 4px;
 }
 /* 버튼 호버효과 */
-.home .button-box a:first-child.btn-border:hover{
+.home .button-box .btn:first-child.btn-border:hover{
     color: #F89235;
 }
 
-.home .button-box a:first-child.btn-border:hover::before,
-.home .button-box a:first-child.btn-border:hover::after {
+.home .button-box .btn:first-child.btn-border:hover::before,
+.home .button-box .btn:first-child.btn-border:hover::after {
     border-color: #F89235;
     transition: border-color 0s, width 0.25s, height 0.25s;
     width: 100%;
     height: 100%;
 }
-.home .button-box a:first-child.btn-border:hover::before {
+.home .button-box .btn:first-child.btn-border:hover::before {
     transition-delay: 0s, 0s, 0.25s;
 }
-.home .button-box a:first-child.btn-border:hover::after {
+.home .button-box .btn:first-child.btn-border:hover::after {
     transition-delay: 0s, 0.25s, 0s;
 }
 
-.home .button-box a:nth-child(2).btn-border:hover{
+.home .button-box .btn:nth-child(2).btn-border:hover{
     color: #F9F871;
 }
-.home .button-box a:nth-child(2).btn-border:hover::before,
-.home .button-box a:nth-child(2).btn-border:hover::after{
+.home .button-box .btn:nth-child(2).btn-border:hover::before,
+.home .button-box .btn:nth-child(2).btn-border:hover::after{
     border-color: #F9F871;
     transition: border-color 0s, width 0.25s, height 0.25s;
     width: 100%;
     height: 100%;
 }
 
-.home .button-box a:nth-child(2).btn-border:hover::before {
+.home .button-box .btn:nth-child(2).btn-border:hover::before {
     transition-delay: 0s, 0s, 0.25s;
 }
-.home .button-box a:nth-child(2).btn-border:hover::after {
+.home .button-box .btn:nth-child(2).btn-border:hover::after {
     transition-delay: 0s, 0.25s, 0s;
 }
 
-.home .button-box a.btn-border:last-child:hover{
+.home .button-box .btn-border:last-child:hover{
     color: #7EB5C7;
 }
-.home .button-box a.btn-border:last-child:hover::before,
-.home .button-box a.btn-border:last-child:hover::after{
+.home .button-box .btn-border:last-child:hover::before,
+.home .button-box .btn-border:last-child:hover::after{
     border-color: #7EB5C7;
     transition: border-color 0s, width 0.25s, height 0.25s;
     width: 100%;
     height: 100%;
 }
 
-.home .button-box a:last-child.btn-border:hover::before {
+.home .button-box .btn:last-child.btn-border:hover::before {
     transition-delay: 0s, 0s, 0.25s;
 }
-.home .button-box a:last-child.btn-border:hover::after {
+.home .button-box .btn:last-child.btn-border:hover::after {
     transition-delay: 0s, 0.25s, 0s;
 }
 
@@ -203,15 +203,15 @@
     font-size: 50px;
     font-family: 'EliceDigitalBaeum_Bold';
     line-height: 1.2;
+    margin: 0.5em 0;
 }
 
 .create .container .form .form-group{    
     display: flex;
     justify-content: space-evenly;
     width: 70%;
-    margin: 0 auto 1em;
+    margin: 1em auto;
     align-items: center;
-    min-height: 7vh;
 }
 
 .create .container .form .form-group .input-title{
@@ -251,6 +251,7 @@
     padding: 0.5em 2em;
     font-family: 'SCoreDream';
     font-size: 1em;
+    margin: 0.5em 0 0;
 }
 .create .container .form .btn-border{    
     color: #fff;
