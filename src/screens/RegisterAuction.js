@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 import axios from 'axios'
+import { twitchName } from './State';
+import { useRecoilValue } from 'recoil';
 
 const TIER_IMG_PATH = "/img/tier";
 const POSITION_IMG_PATH = "/img/position";
 export default function RegisterAuction() {
 	
+	const loginName = useRecoilValue(twitchName)
+
 	const [userName, setUserName] = useState()
 	const [tier, setTier] = useState('Iron')
 	const [tierNum, setTierNum] = useState()
@@ -135,14 +139,13 @@ export default function RegisterAuction() {
 			return
 		}
 		setMost(data)
-
 	}
 
 
 	return (
 		<div className="create register">
 			<div className="container">
-				<h1 className="title">{"{트위치이름}"} 님!<br />
+				<h1 className="title">{loginName} 님!<br />
 					정보를 입력해주세요!
 				</h1>
 				<div className="form">
