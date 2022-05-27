@@ -16,13 +16,6 @@
     font-weight: normal;
     font-style: normal;
 }
-@font-face {
-    font-family: 'locus_sangsang';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/locus_sangsang.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
 @import url('https://webfontworld.github.io/SCoreDream/SCoreDream.css');
 
 /* 배경 설정 */
@@ -45,6 +38,7 @@
       ),
     url('/public/img/background.png') ;
     background-position:50% 50%;
+    background-size: cover;
     height: 100vh;
     text-align: center;
     display: flex;
@@ -52,6 +46,116 @@
     flex-direction: column;
     justify-content: center;
 }
+
+/* 로그인페이지 설정 */
+.login-btn {
+    margin-top: 50px;
+    line-height: 10px;
+    display: inline-block;
+    padding: 25px 50px;
+    font-size: 15px;
+    letter-spacing: 3px;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+    font-family: 'SCoreDream';
+}
+.login-btn__text {
+    color: #DAB644;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: 300ms ease;
+    position: relative;
+}
+.login-btn:hover .login-btn__text {
+    color: white;
+}
+.login-btn__solid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 10px;
+    background-color: #DAB644;
+    width: calc(100% - (5px * 4));
+    height: calc(100% - (5px * 4));
+    transform-origin: 50%;
+    transform: scale(0.85);
+    opacity: 0;
+    transition: 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.login-btn:hover .login-btn__solid {
+    opacity: 1;
+    transform: scale(1);
+}
+.login-btn__outline {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.login-btn__outline--tall {
+    margin: 0 5px;
+    width: calc(100% - (5px * 2));
+    height: 100%;
+}
+.login-btn__outline--flat {
+    margin: 5px 0;
+    height: calc(100% - (5px * 2));
+    width: 100%;
+}
+.login-btn__line {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.login-btn__line--tall:before, .login-btn__line--tall:after {
+    height: 100%;
+    width: 1px;
+    top: 0;
+}
+.login-btn:hover .login-btn__outline--flat .login-btn__line--tall:before, .login-btn:hover .login-btn__outline--flat .login-btn__line--tall:after {
+    transform: scaleY(0);
+}
+.login-btn:hover .login-btn__outline--tall .login-btn__line--tall:before, .login-btn:hover .login-btn__outline--tall .login-btn__line--tall:after {
+    margin: 5px 0;
+    height: calc(100% - (5px * 2));
+}
+.login-btn__line--tall:before {
+    left: 0;
+}
+.login-btn__line--tall:after {
+    right: 0;
+}
+.login-btn__line--flat:before, .login-btn__line--flat:after {
+    width: 100%;
+    height: 1px;
+    left: 0;
+}
+.login-btn:hover .login-btn__outline--tall .login-btn__line--flat:before, .login-btn:hover .login-btn__outline--tall .login-btn__line--flat:after {
+    transform: scaleX(0);
+}
+.login-btn:hover .login-btn__outline--flat .login-btn__line--flat:before, .login-btn:hover .login-btn__outline--flat .login-btn__line--flat:after {
+    margin: 0 5px;
+    width: calc(100% - (5px * 2));
+}
+.login-btn__line--flat:before {
+    top: 0;
+}
+.login-btn__line--flat:after {
+    bottom: 0;
+}
+.login-btn__line:before, .login-btn__line:after {
+    content: '';
+    display: block;
+    position: absolute;
+    background-color: #DAB644;
+    transition: 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.login-btn:hover .login-btn__line:before, .login-btn:hover .login-btn__line:after {
+    transition: 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
 
 /* 메인페이지 설정 */
 .home{
@@ -215,10 +319,10 @@
 }
 
 .create .container .form .form-group .input-title{
-    font-family: 'locus_sangsang';
+    font-family: 'SCoreDream';
     font-size: 1.5em;
     letter-spacing: 0.1em;
-    word-spacing: 4.2em;
+    word-spacing: 4.8em;
 }
 
 .create .container .form .form-group .input-box{
@@ -226,7 +330,7 @@
 }
 
 .create .container .form .form-group input{
-    font-family: 'locus_sangsang';
+    font-family: 'SCoreDream';
     font-size: 1.2em;
     width: 100%;    
     border-radius: 5px;
@@ -316,16 +420,16 @@
     align-items: center;
 }
 .register .container .form .form-group .tier-option .tier-img{
-    width: 80%;
+    width: 66%;
 }
 .register .container .form .form-group .tier-option .tier-radio {
     display: flex;
     align-items: center;
-    font-family: 'locus_sangsang';
+    font-family: 'SCoreDream';
 }
 .register .container .form .form-group .tier-option .tier-radio input[type="radio"]{
     width: auto;    
-    margin: 0 0.3em 0 0.8em;
+    margin: 0 0.2em 0 0.8em;
     min-height:10px;
 }
 .register .container .form .form-group .position{
@@ -345,6 +449,108 @@
     max-width: 40px;
 }
 .register .container .form .form-group .champion-opction .champions-img{
-    max-width: 35px;
+    max-width: 75px;
     width: 100%;
+}
+
+/* 경매참가 페이지 */
+.join{
+    width:85%;
+    margin: 0 auto;
+}
+.join .title{
+    color: #fff;
+    font-size: 50px;
+    font-family: 'EliceDigitalBaeum_Bold';
+    line-height: 1.2;
+    margin: 0.5em 0 1em;
+}
+.join .container{    
+    display: flex;
+    justify-content: space-between;
+    height: 70vh;
+}
+.join .auction{
+    width: 30%;
+    background: rgba(255,255,255,0.5);
+}
+
+.join .auction .palyer-info{
+    background: #fff;
+    height: 25%;
+    margin: 1em 1.5em;
+}
+.join .auction .chat-box{
+    height: 50%;
+    background: rgba(0,0,0,0.5);
+    padding: 0 1.5em;
+}
+.join .auction .auction-form{
+    margin: 1em 1.5em 0;
+}
+.join .auction .auction-form input{
+    font-family: 'SCoreDream';
+    font-size: 1.2em;
+    width: 95%;
+    border: 1px solid #cdcdcd;
+    padding: 0.2em 0.5em;
+    min-height: 36px;
+}
+.join .auction .auction-form input:focus-visible{
+    outline: 0;
+}
+
+.join .auction .auction-form .btn-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.7em 0 0 ;
+}
+.join .auction .auction-form .btn-box > button{
+    font-family: "SCoreDream";
+    font-weight: 600;
+    font-size: 20px;
+    min-width: 70px;
+    height: 5vh;
+    border: 0;
+    cursor: pointer;
+    background: #fff5b6;
+}
+.join .auction .auction-form .btn-box > button.submit{
+    color: #fff;
+    background: #9147ff;
+}
+.join .auction .auction-form .btn-box > button:hover{
+    background: #E8D699;
+}
+.join .auction .auction-form .btn-box > button.submit:hover{
+    background: #6D36BF;
+}
+
+
+.join .team{
+    width: 60%;    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.join .team .player-list, .join .team .team-list{
+    background: rgba(255,255,255,0.5);
+    height:45%;
+    overflow: hidden;
+    overflow-y: auto;
+    text-align: left;
+    padding-bottom: 1em;
+}
+.join .team .player-list .player{
+    display:inline-block;
+    font-family: "SCoreDream";
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    padding: 0 1em 0;
+}
+.join .team .player-list .player .emoji{
+    font-size: 70px;
 }
