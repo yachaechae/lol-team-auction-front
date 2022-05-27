@@ -1,38 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 import axios from 'axios'
-import { twitchName } from './State';
+import { loginInfoAtom } from './State';
 import { useRecoilValue } from 'recoil';
 
 const TIER_IMG_PATH = "/img/tier";
 const POSITION_IMG_PATH = "/img/position";
 export default function RegisterAuction() {
 	
-	const loginName = useRecoilValue(twitchName)
-
-	const [userName, setUserName] = useState()
-	const [tier, setTier] = useState('Iron')
-	const [tierNum, setTierNum] = useState()
-	const [position, setPosition] = useState()
-	const [subposition, setSubposition] = useState()
+	const loginName = useRecoilValue(loginInfoAtom);
 	const [champions, setChampions] = useState([])
-	const [most, setMost] = useState([])
+	const [userInfo,setUserInfo] = useState({
+		userName : '',
+		userTier : 'Iron',
+		userTierNum : '',
+		userPosition : '',
+		userSubPosition : '',
+		userMost : ''
+	});
 
-	const updateUserName = (data) => {
-		setUserName(data.target.value)
+	const updateUserInfo = (e) => {
+		console.log(e)
+		setUserInfo({
+			...userInfo,
+			[e.target.name] : e.target.value
+		})
 	}
 
 	// 랭크티어 이미지 정보
 	const ranktier = [
-		{ value: 'iron', label: 'Iron', image: `${TIER_IMG_PATH}/iron.png`},
-		{ value: 'bronze', label: 'Bronze', image:`${TIER_IMG_PATH}/bronze.png`},
-		{ value: 'silver', label: 'Silver', image:`${TIER_IMG_PATH}/silver.png`},
-		{ value: 'gold', label: 'Gold', image:`${TIER_IMG_PATH}/gold.png`},
-		{ value: 'platinum', label: 'Platinum', image:`${TIER_IMG_PATH}/platinum.png`},
-		{ value: 'diamond', label: 'Diamond', image:`${TIER_IMG_PATH}/diamond.png`},
-		{ value: 'master', label: 'Master', image:`${TIER_IMG_PATH}/master.png` },
-		{ value: 'grandmaster', label: 'Grandmaster', image:`${TIER_IMG_PATH}/grandmaster.png`},
-		{ value: 'challenger', label: 'Challenger', image:`${TIER_IMG_PATH}/challenger.png`},
+		{ value: '아이언', label: 'Iron', image: `${TIER_IMG_PATH}/iron.png`},
+		{ value: '브론즈', label: 'Bronze', image:`${TIER_IMG_PATH}/bronze.png`},
+		{ value: '실버', label: 'Silver', image:`${TIER_IMG_PATH}/silver.png`},
+		{ value: '골드', label: 'Gold', image:`${TIER_IMG_PATH}/gold.png`},
+		{ value: '플래티넘', label: 'Platinum', image:`${TIER_IMG_PATH}/platinum.png`},
+		{ value: '다이아몬드', label: 'Diamond', image:`${TIER_IMG_PATH}/diamond.png`},
+		{ value: '마스터', label: 'Master', image:`${TIER_IMG_PATH}/master.png` },
+		{ value: '그랜드마스터', label: 'Grandmaster', image:`${TIER_IMG_PATH}/grandmaster.png`},
+		{ value: '챌린저', label: 'Challenger', image:`${TIER_IMG_PATH}/challenger.png`},
 	  ]
 
 	// 랭크 셀렉트 박스 css 설정
@@ -40,7 +45,6 @@ export default function RegisterAuction() {
 		container:(provided)=> ({
 			...provided,
 			maxWidth: '195px',
-			width: '100%',
 		}),
 		placeholder: (provided) => ({
 			...provided,
@@ -51,19 +55,9 @@ export default function RegisterAuction() {
 	}
 	//티어 정보 업데이트
 	const updateTier = (data) => {
-		setTier(data.label)
-	}
-	const updateTierNum = (data) => {
-		setTierNum(data.target.value)
-	}
-
-	//포지션 정보 업데이트
-	const updatePosition = (data) => {
-		setPosition(data.target.value)
-	}
-
-	const updateSubposition = (data) => {
-		setSubposition(data.target.value)
+		setUserInfo({
+			...userInfo,
+			userTier : data.label})
 	}
 
 	//챔피언 정보 가져오기
@@ -109,6 +103,7 @@ export default function RegisterAuction() {
 		menuList: (provided) => ({
 			...provided,
 			textAlign: 'left',
+			height: '200px',
 			"::-webkit-scrollbar" : {
 				width: '8px',  
 			},			
@@ -130,6 +125,11 @@ export default function RegisterAuction() {
 			...provided,
 			display: 'inline-block',
 			width: '75px',
+		}),
+		multiValue: (provided) => ({
+			...provided,
+			maxWidth: '65px',
+			margin: '0 2px'
 		})
 	}	
 
@@ -138,21 +138,34 @@ export default function RegisterAuction() {
 			alert("3개만 선택해주세요")
 			return
 		}
-		setMost(data)
+		setUserInfo({
+			...userInfo,
+			userMost : data})
 	}
-
+	
+	const postUserInfo = () => {
+		axios.post('http://119.192.243.239:13030/api/auction',{
+			// 보내려는 데이터 정보
+			...userInfo,
+			token: loginName.token
+		}).then((response) => {
+			console.log("It's work!")
+			console.log(response)
+            // TODO: 신청이 완료되었습니다! 띄워주기 => 다시 메인으로 보내기
+		})
+	}
 
 	return (
 		<div className="create register">
 			<div className="container">
-				<h1 className="title">{loginName} 님!<br />
+				<h1 className="title">{loginName.twitchName} 님!<br />
 					정보를 입력해주세요!
 				</h1>
 				<div className="form">
 					<div className="form-group">
 						<div className="input-title">롤 닉네임</div>
 						<div className="input-box">
-							<input type="text" placeholder="롤 닉네임을 입력해주세요" onChange={updateUserName}></input>
+							<input type="text" placeholder="롤 닉네임을 입력해주세요" name="userName" onChange={updateUserInfo}></input>
 						</div>
 
 					</div>
@@ -160,6 +173,7 @@ export default function RegisterAuction() {
 						<div className="input-title">최고티어</div>
 						<div className='input-box tier-option'>
 							<Select
+								name='userTier'
 								styles={tierStyles}
 								options={ranktier} 
 								onChange={updateTier}
@@ -172,16 +186,16 @@ export default function RegisterAuction() {
 							/>
 							<div className="tier-radio">
 								<label>
-									<input type="radio" value="1" name="tier" onChange={updateTierNum}/>1
+									<input type="radio" value="1" name="userTierNum" onChange={updateUserInfo}/>1
 								</label>
 								<label>
-									<input type="radio" value="2" name="tier" onChange={updateTierNum}/>2
+									<input type="radio" value="2" name="userTierNum" onChange={updateUserInfo}/>2
 								</label>
 								<label>
-									<input type="radio" value="3" name="tier" onChange={updateTierNum}/>3
+									<input type="radio" value="3" name="userTierNum" onChange={updateUserInfo}/>3
 								</label>
 								<label>
-									<input type="radio" value="4" name="tier" onChange={updateTierNum}/>4
+									<input type="radio" value="4" name="userTierNum" onChange={updateUserInfo}/>4
 								</label>
 							</div>
 						</div>
@@ -191,24 +205,24 @@ export default function RegisterAuction() {
 						<div className="input-title">주 라인</div>
 						<div className="input-box position">
 							<label className="position-radio">
-								<input type="radio" value="Top" name="position" onChange={updatePosition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Top.png`}/>
+								<input type="radio" value="Top" name="userPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Top.png`}/>
 							</label>							
 							<label className="position-radio">
-								<input type="radio" value="Jungle" name="position" onChange={updatePosition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Jungle.png`}/>
+								<input type="radio" value="Jungle" name="userPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Jungle.png`}/>
 							</label>							
 							<label className="position-radio">
-								<input type="radio" value="Mid" name="position" onChange={updatePosition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Mid.png`}/>
+								<input type="radio" value="Mid" name="userPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Mid.png`}/>
 							</label>							
 							<label className="position-radio">
-								<input type="radio" value="Bot" name="position" onChange={updatePosition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Bot.png`}/>
+								<input type="radio" value="Bot" name="userPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Bot.png`}/>
 							</label>							
 							<label className="position-radio">
-								<input type="radio" value="Support" name="position" onChange={updatePosition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Support.png`}/>
+								<input type="radio" value="Support" name="userPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Support.png`}/>
 							</label>
 						</div>
 					</div>
@@ -216,24 +230,24 @@ export default function RegisterAuction() {
 						<div className="input-title">부 라인</div>
 						<div className="input-box position">
 							<label className="position-radio">
-								<input type="radio" value="Top" name="subPosition" onChange={updateSubposition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Top.png`}/>
+								<input type="radio" value="Top" name="userSubPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Top.png`}/>
 							</label>							
 							<label className="position-radio">
-								<input type="radio" value="Jungle" name="subPosition" onChange={updateSubposition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Jungle.png`}/>
+								<input type="radio" value="Jungle" name="userSubPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Jungle.png`}/>
 							</label>							
 							<label className="position-radio">
-								<input type="radio" value="Mid" name="subPosition" onChange={updateSubposition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Mid.png`}/>
+								<input type="radio" value="Mid" name="userSubPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Mid.png`}/>
 							</label>							
 							<label className="position-radio">
-								<input type="radio" value="Bot" name="subPosition" onChange={updateSubposition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Bot.png`}/>
+								<input type="radio" value="Bot" name="userSubPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Bot.png`}/>
 							</label>							
 							<label className="position-radio">
-								<input type="radio" value="Support" name="subPosition" onChange={updateSubposition}/>
-								<img src={`${POSITION_IMG_PATH}/Position_${tier}-Support.png`}/>
+								<input type="radio" value="Support" name="userSubPosition" onChange={updateUserInfo}/>
+								<img src={`${POSITION_IMG_PATH}/Position_${userInfo.userTier}-Support.png`}/>
 							</label>
 						</div>
 					</div>
@@ -241,7 +255,8 @@ export default function RegisterAuction() {
 						<div className="input-title">MOST 3</div>
 						<div className="input-box champion-opction">
 							<Select
-								value={most}
+								value={userInfo.userMost}
+								name="userMost"
 								closeMenuOnSelect={false}
 								isMulti={true}
 								styles={championStyles}
@@ -254,7 +269,7 @@ export default function RegisterAuction() {
 							/>
 						</div>
 					</div>
-					<button className="btn-border">설정 완료</button>
+					<button className="btn-border" onClick={()=>{postUserInfo()}}>설정 완료</button>
 				</div>
 			</div>
 		</div>
