@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { loginInfoAtom } from './State';
 
 export default function CreateAuction() {
-    const loginName = useRecoilValue(loginInfoAtom);
+    const loginName = useRecoilValue(loginInfoAtom)
     const [auctionInfo,setAuctionInfo] = useState({
         maxTeam : 0,
         initialPoint : 0
