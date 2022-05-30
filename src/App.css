@@ -18,6 +18,26 @@
 }
 @import url('https://webfontworld.github.io/SCoreDream/SCoreDream.css');
 
+/* input css 설정 */
+input{
+    font-family: 'SCoreDream';
+    font-size: 1.2em;
+    width: 100%;    
+    border-radius: 5px;
+    border: 1px solid #cdcdcd;
+    padding: 0.2em 0.5em;
+    min-height: 36px;
+}
+
+input::placeholder{
+    font-family: 'SCoreDream';
+    font-size: 15px;
+}
+
+input:focus-visible{
+    outline: 1px solid #d2ddec;
+}
+
 /* 배경 설정 */
 #root {
     background-image: linear-gradient(
@@ -272,6 +292,127 @@
     transition-delay: 0s, 0.25s, 0s;
 }
 
+/* modal css 설정 */
+.modal-container{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+}
+.modal-container .modal-overlay{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+.modal-container .modal-content{
+    position: relative;
+    top: 0px;
+    margin: 0 auto;
+    border-radius: 25px 0 25px 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    background-color: white;
+    text-align: center;
+    width: 50%;
+    height: 40vh;
+}
+.modal-container .modal-content .modal-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    background-color: #fcf3cf;
+    width: 100%;
+    overflow: auto;
+    height: 10%;    
+    border-radius: 25px 0 0 0;
+}
+
+.modal-container .modal-content .modal-title .close{
+    position: absolute;
+    margin-right: 15px;
+    color: gray;
+    right: 0;
+}
+.modal-container .modal-content .modal-title .close:hover{
+    cursor: pointer;
+}
+
+.modal-container .modal-content .modal-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 90%;
+}
+
+.modal-container .modal-content .modal-body input{
+    width: 80%;
+}
+
+.modal-container .modal-content .modal-body .codeBtn{
+    background: #56a351;
+    border: none;
+    cursor: pointer;
+    padding: 0.5em 2em;
+    font-family: 'SCoreDream';
+    font-size: 1em;
+    margin: 0.5em 0 0;
+}
+.modal-container .modal-content .modal-body .codeBtn{    
+    color: #fff;
+    transition: color 0.25s 0.0833333333s;
+    position: relative;
+}
+.modal-container .modal-content .modal-body .codeBtn::before,
+.modal-container .modal-content .modal-body .codeBtn::after{
+    border: 0 solid transparent;
+    box-sizing: border-box;
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    bottom: 0;
+    right: 0;
+}
+.modal-container .modal-content .modal-body .codeBtn::before{
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+.modal-container .modal-content .modal-body .codeBtn::after{
+    border-top-width: 2px;
+    border-right-width: 2px;
+}
+
+
+.modal-container .modal-content .modal-body .codeBtn:hover{
+    color: #56a351;    
+    background: none;
+    font-weight: 500;
+}
+
+.modal-container .modal-content .modal-body .codeBtn:hover::before,
+.modal-container .modal-content .modal-body .codeBtn:hover::after {
+    border-color: #56a351;
+    transition: border-color 0s, width 0.25s, height 0.25s;
+    width: 100%;
+    height: 100%;
+}
+.modal-container .modal-content .modal-body .codeBtn:hover::before {
+    transition-delay: 0s, 0s, 0.25s;
+}
+.modal-container .modal-content .modal-body .codeBtn:hover::after {
+    transition-delay: 0s, 0.25s, 0s;
+}
+
 /* 경매장 생성부분 설정 */
 .create{
     background: #fafafa;
@@ -327,25 +468,6 @@
 
 .create .container .form .form-group .input-box{
     width: 50%;        
-}
-
-.create .container .form .form-group input{
-    font-family: 'SCoreDream';
-    font-size: 1.2em;
-    width: 100%;    
-    border-radius: 5px;
-    border: 1px solid #cdcdcd;
-    padding: 0.2em 0.5em;
-    min-height: 36px;
-}
-
-.create .container .form .form-group input::placeholder{
-    font-family: 'SCoreDream';
-    font-size: 15px;
-}
-
-.create .container .form .form-group input:focus-visible{
-    outline: 1px solid #d2ddec;
 }
 
 .create .container .form button{
@@ -486,25 +608,19 @@
     padding: 0 1.5em;
 }
 .join .auction .auction-form{
-    margin: 1em 1.5em 0;
+    margin: 1em 1.5em;
 }
-.join .auction .auction-form input{
-    font-family: 'SCoreDream';
-    font-size: 1.2em;
-    width: 95%;
-    border: 1px solid #cdcdcd;
-    padding: 0.2em 0.5em;
-    min-height: 36px;
-}
+
 .join .auction .auction-form input:focus-visible{
     outline: 0;
 }
 
 .join .auction .auction-form .btn-box{
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin: 0.7em 0 0 ;
+    margin: 0.5em 0 0 ;
 }
 .join .auction .auction-form .btn-box > button{
     font-family: "SCoreDream";
@@ -514,14 +630,14 @@
     height: 5vh;
     border: 0;
     cursor: pointer;
-    background: #fff5b6;
+    background: #fffadf;
 }
 .join .auction .auction-form .btn-box > button.submit{
     color: #fff;
     background: #9147ff;
 }
 .join .auction .auction-form .btn-box > button:hover{
-    background: #E8D699;
+    background: #ede8cd;
 }
 .join .auction .auction-form .btn-box > button.submit:hover{
     background: #6D36BF;

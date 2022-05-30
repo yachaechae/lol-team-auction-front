@@ -2,11 +2,13 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
+import ModalFrame from '../utils/ModalFrame'
 import { loginInfoAtom } from './State'
 
 export default function Home() {
 
-    const [loginInfo, setLoginInfo] = useRecoilState(loginInfoAtom)
+    const [loginInfo, setLoginInfo] = useRecoilState(loginInfoAtom)    
+    const [modalState, setModalState] = useState(false)
     const navigator = useNavigate();
     
     useEffect(() => {
@@ -37,6 +39,16 @@ export default function Home() {
         }
     }
 
+    const openModal = () =>{
+        setModalState(true)
+    }
+
+    const closeModal = (e) =>{
+        e.preventDefault()
+        setModalState(false)
+    }
+
+
     return (
         <div className="home">
             <h1 className="title">롤 팀 경매장</h1>
@@ -49,9 +61,10 @@ export default function Home() {
                     선수 등록
                 </button>
 
-                <button className="btn btn-border" onClick={() => {btnClicked('/join-auction/')}}>
+                <button className="btn btn-border" onClick={() => { openModal()}}>
                     경매 참가
                 </button>
+                <ModalFrame state={modalState} closeModal={closeModal} />
 
             </div>
         </div>
