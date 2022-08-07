@@ -31,17 +31,17 @@ export default function Login() {
 
   return (
     <div>
-        <a class="login-btn" onClick={() =>{login()}}>
-            <span class="login-btn__outline login-btn__outline--tall">
-                <span class="login-btn__line login-btn__line--tall"></span>
-                <span class="login-btn__line login-btn__line--flat"></span>
+        <a className="login-btn" onClick={() =>{login()}}>
+            <span className="login-btn__outline login-btn__outline--tall">
+                <span className="login-btn__line login-btn__line--tall"></span>
+                <span className="login-btn__line login-btn__line--flat"></span>
             </span>
-            <span class="login-btn__outline login-btn__outline--flat">
-                <span class="login-btn__line login-btn__line--tall"></span>
-                <span class="login-btn__line login-btn__line--flat"></span>
+            <span className="login-btn__outline login-btn__outline--flat">
+                <span className="login-btn__line login-btn__line--tall"></span>
+                <span className="login-btn__line login-btn__line--flat"></span>
             </span>
-            <span class="login-btn__solid"></span>
-            <span class="login-btn__text">Login</span>
+            <span className="login-btn__solid"></span>
+            <span className="login-btn__text">Login</span>
         </a>
 
     </div>

@@ -1,271 +1,296 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useRecoilValue } from 'recoil';
+import Timer from './component/Timer';
+import TeamLeaderModal from './component/TeamLeaderModal';
+import { loginInfoAtom } from './State';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import axios from 'axios';
+import { requestChampData } from '../utils/DataDragonUtils';
+import ErrorAlert from '../error/ErrorCodeHandler';
 
+const POSITION_IMG_PATH = "/img/position";
+const TIER_IMG_PATH = "/img/tier";
+
+const emojiList = ["😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿", "😾"]
+const leaderEmojiList = ["😎", "🤠", "😄", "🤗", "🤓", "🥸", "🤔", "😋", "🥳"]
+
+
+let sockJS;
+let stompClient;
+
+let version;
 export default function JoinAuction() {
-    
-    const emojiList = ["😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿", "😾"]
+    const navigator = useNavigate();
+    const location = useLocation()
+    const { auctionId, auctionOwnerName } = location.state ?? {}
+    const loginName = useRecoilValue(loginInfoAtom)
+    const [modalState, setModalState] = useState(false)
 
-    const randomEmoji = (length) =>{
-        return emojiList[parseInt(Math.random() * length)];
+    const [point, setPoint] = useState()
+    const [playerInfo, setPlayerInfo] = useState({})
+    const [playerList, setPlayerList] = useState([])
+    const [message, setMessage] = useState([])
+    const [leaderInfo, setLeaderInfo] = useState()
+    const [time, setTime] = useState(0)
+    const [bidPoint, setBidPoint] = useState()
+    const scroll = useRef()
+    
+    const openModal = () => {
+        setModalState(true)
     }
+
+    const closeModal = (e) => {
+        e.preventDefault()
+        setModalState(false)
+    }
+
+    const waitingPlayer = playerList && playerList.map((player, index) => {
+        return (
+            <div key={index} className="player">
+                <div className="emoji">
+                    {emojiList[player.profileImg]}
+                </div>
+                {player.twitchName}
+            </div>
+        )
+    })
+
+    const team = leaderInfo && leaderInfo.map((leader, index) => {
+        return (
+            <div keys={index} className="team-list">
+                <div className="player leader">
+                    <div className="emoji">
+                        {leaderEmojiList[leader.leader.profileImg]}
+                    </div>
+                    {leader.leader.twitchName}
+                    <div className="point">{leader.teamPoint}</div>
+                </div>
+                {
+                    leader.playerList && leader.playerList.map((player, index) => {
+                        if(player.playerType === "GENERAL"){
+                            return (
+                                <div className="player">
+                                    <div className="emoji">
+                                        {emojiList[player.profileImg]}
+                                    </div>
+                                    {player.twitchName}
+                                </div>
+                            )
+                        }
+                    })
+                }
+            </div>
+        )
+    })
+
+    useEffect(() => {
+        sockJS = new SockJS("http://119.192.243.12:13031/ws");
+        stompClient = Stomp.over(sockJS);
+
+        stompClient.connect({ user: loginName.twitchName, auctionId: auctionId }, async () => {
+            version = (await requestChampData()).data.version
+            stompClient.subscribe('/user/sub/info', (data) => {
+                console.log(JSON.parse(data.body))
+                setLeaderInfo(JSON.parse(data.body).team)
+                setPlayerList(JSON.parse(data.body).waitingPlayer)
+                setPlayerInfo(JSON.parse(data.body).processingInfo?.auctionPlayer)
+                setBidPoint(JSON.parse(data.body).processingInfo?.biddingPoint)
+            })
+
+            console.log(`/sub/auction/${auctionId}/info`)
+            stompClient.subscribe(`/sub/auction/${auctionId}/info`, (data) => {
+                console.log(JSON.parse(data.body))
+                setLeaderInfo(JSON.parse(data.body).message.team)
+                setPlayerList(JSON.parse(data.body).message.waitingPlayer)
+                setPlayerInfo(JSON.parse(data.body).message.processingInfo?.auctionPlayer)
+                setBidPoint(JSON.parse(data.body).message.processingInfo?.biddingPoint)
+            })
+
+            //경매로그 나오는 부분
+            stompClient.subscribe(`/sub/auction/${auctionId}`, (data) => {
+
+                if (JSON.parse(data.body).type === "AUCTION_PREPARE") {
+                    setTime(5)
+                    setPoint(0)
+                }else if (JSON.parse(data.body).type === "AUCTION_START" || JSON.parse(data.body).type === "BID_ACCEPTED"){
+                    setTime(15)
+                }
+
+                setMessage((message) => {
+                    return [...message, JSON.parse(data.body).message]
+                })
+            })
+
+            stompClient.subscribe('/user/sub/errors', (data) => {
+                console.log(data)
+                ErrorAlert(JSON.parse(data.body))
+            })
+            stompClient.send('/pub/auction/join', {}, JSON.stringify({ auctionId: auctionId, userName: loginName.twitchName }))
+        }, (err) => {
+            console.log(err)
+            navigator('/login')
+        })
+
+
+        return () => {
+            console.log("연결종료")
+            stompClient.disconnect();
+            sockJS.close();
+        }
+    }, [])
+
+    const messageView = message.map((data) => {
+        return (
+            <div className="message">{data}</div>
+        )
+    });
+
+    useEffect(() => {
+        chatScroll()
+    },[message])
+
+    const chatScroll = () =>{
+        const {scrollHeight, clientHeight} = scroll.current;
+        scroll.current.scrollTop = scrollHeight - clientHeight
+    }
+
+    const auctionStart = () => {
+        console.log("경매를 시작합니다!")
+        stompClient.send('/pub/auction/start', {}, JSON.stringify({ auctionId: auctionId }))
+    }
+    
+    const auctionPause = () => {
+        console.log("경매를 정지합니다!")
+        stompClient.send('/pub/auction/pause', {}, JSON.stringify({ auctionId: auctionId }))
+
+    }
+
+    const championImgs = () => {
+        const champImg = playerInfo?.playerMost && playerInfo.playerMost.map((champImg) => {
+            return <img className="champion-img" src={`http://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champImg.name}.png`} />
+        })
+        return champImg
+    }
+
+    const enterPoint = (e) => {
+        setPoint(e.target.value)
+    }
+
+    const plusBtn = (e) => {
+        if (point < bidPoint) {
+            setPoint(Number(bidPoint) + Number(e.target.value))
+        }else{
+            setPoint(Number(point) + Number(e.target.value))
+        }
+    }
+    
+
+    const bid = () => {
+        console.log(point)
+        stompClient.send('/pub/auction/bid', {}, JSON.stringify({ auctionId: auctionId, bidPoint: point }))
+    }
+
     return (
         <div className="join">
-            <h1 className="title">{"{트위치이름}"} 의 경매장</h1>
+            <h1 className="title">{auctionOwnerName} 의 경매장</h1>
             <div className="container">
                 <div className="auction">
-					<div className="palyer-info">
-
-					</div>
-					<div className="chat-box">
-
-					</div>
-                    <div className="auction-form">
-                        <input type="text" placeholder="숫자만 입력해주세요!" name=""></input>
-                        <div className="btn-box">
-                            <button type="button">+5</button>
-                            <button type="button">+10</button>
-                            <button type="button">+50</button>
-                            <button type="button">+100</button>
-                            <button type="button" className="submit btnPush">입찰</button>
+                    <div className="palyer">
+                        <div className="player-info">
+                            <span>트위치 닉</span> {playerInfo?.twitchName}
                         </div>
+                        <div className="player-info">
+                            <span>롤 닉</span> {playerInfo?.lolName}
+                        </div>
+                        <div className="player-info">
+                            <span>티어 정보</span>
+                            {playerInfo?.highestTier &&
+                                <>
+                                    <img className="tier-img" src={`${TIER_IMG_PATH}/${playerInfo?.highestTier?.slice(0, -1)}.png`} alt={playerInfo?.highestTier} />{playerList?.userTierNum}
+                                </>
+                            }
+                        </div>
+                        <div className="player-info">
+                            <span>모스트 3</span>
+                            <div className="img-box">
+                                {championImgs()}
+                            </div>
+                        </div>
+
+                        <div className="player-info">
+                            <span>주 라인</span>
+                            {!!playerInfo?.highestTier &&
+                                <img className="position-img" src={`${POSITION_IMG_PATH}/Position_${playerInfo?.highestTier?.slice(0, -1)}-${playerInfo?.primaryLane}.png`} />
+                            }
+                        </div>
+                        <div className="player-info">
+                            <span>부 라인</span>
+                            {!!playerInfo?.highestTier &&
+                                <img className="position-img" src={`${POSITION_IMG_PATH}/Position_${playerInfo?.highestTier?.slice(0, -1)}-${playerInfo?.secondaryLane}.png`} />
+                            }
+                        </div>
+
+                    </div>
+                    <div className="chat-container" >
+                        <div className="chat-box" ref={scroll}>
+                            {messageView}
+                        </div>
+                        <div className="auction-info">
+                            <Timer seconds={time} setSeconds={setTime} />
+                            현재 낙찰가
+                            <div>
+                                {bidPoint}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="auction-form">
+                        {/* TODO : 채팅 연결 */}
+                        {auctionOwnerName === loginName.twitchName ?
+                            <div className="admin-form">
+                                <div className="btn-box admin-btn">
+                                    <button onClick={openModal}>팀장 선정</button>
+                                    <TeamLeaderModal data={playerList} isOpen={modalState} closeModal={closeModal} />
+                                    <button className="pause" onClick={auctionPause}>일시 정지</button>
+                                    <button className="start" onClick={auctionStart}>경매 시작</button>
+                                </div>
+                                <input type="number" placeholder="숫자만 입력해주세요!" name="point" value={point} onChange={enterPoint} />
+                                <div className="btn-box">
+                                    <button onClick={plusBtn} value="5">+5</button>
+                                    <button onClick={plusBtn} value="10">+10</button>
+                                    <button onClick={plusBtn} value="50">+50</button>
+                                    <button onClick={plusBtn} value="100">+100</button>
+                                    <button className="buy" onClick={bid}>입찰</button>
+                                </div>
+                            </div>
+                            :
+                            <>
+                                <input type="number" placeholder="숫자만 입력해주세요!" name="point" value={point} onChange={enterPoint} />
+                                <div className="btn-box">
+                                    <button onClick={plusBtn} value="5">+5</button>
+                                    <button onClick={plusBtn} value="10">+10</button>
+                                    <button onClick={plusBtn} value="50">+50</button>
+                                    <button onClick={plusBtn} value="100">+100</button>
+                                    <button className="buy" onClick={bid}>입찰</button>
+                                </div>
+                            </>
+                        }
                     </div>
                 </div>
                 <div className="team">
-                    <div className="player-list">
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>
-                        <div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div><div className="player">
-                            <div className="emoji">
-                                {randomEmoji(emojiList.length)}
-                            </div>
-                            {"{트위치이름}"}
-                        </div>  
+                    <div className="player-board">
+                        {waitingPlayer}
+
                     </div>
-                    <div className="team-list">
+                    <div className="player-board team-board">
+                        {team}
                     </div>
                 </div>
             </div>
         </div>
     )
 }
-    
+

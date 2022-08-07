@@ -25,8 +25,8 @@ input{
     width: 100%;    
     border-radius: 5px;
     border: 1px solid #cdcdcd;
-    padding: 0.2em 0.5em;
-    min-height: 36px;
+    padding: 0.5em 0.7em;
+    box-sizing: border-box;
 }
 
 input::placeholder{
@@ -40,6 +40,7 @@ input:focus-visible{
 
 /* 배경 설정 */
 #root {
+    min-width : 1400px;
     background-image: linear-gradient(
         to top,
         rgba(20, 20, 20, 0) 55%,
@@ -178,7 +179,7 @@ input:focus-visible{
 
 
 /* 메인페이지 설정 */
-.home{
+.home{    
     height: 100vh;
     display: flex;
     flex-wrap: wrap;
@@ -328,7 +329,7 @@ input:focus-visible{
     justify-content: center;
     align-items: center;
     font-size: 1.5em;
-    background-color: #fcf3cf;
+    background-color: #fafafa;
     width: 100%;
     overflow: auto;
     height: 10%;    
@@ -354,7 +355,7 @@ input:focus-visible{
 }
 
 .modal-container .modal-content .modal-body input{
-    width: 80%;
+    width: 50%;
 }
 
 .modal-container .modal-content .modal-body .codeBtn{
@@ -415,8 +416,9 @@ input:focus-visible{
 
 /* 경매장 생성부분 설정 */
 .create{
+    min-width : 960px;
     background: #fafafa;
-    width: 55%;
+    width: 50%;
     margin: 0 auto;
     position: relative;
 }
@@ -430,6 +432,7 @@ input:focus-visible{
     font-family: 'twayair';
     color: #7c7c7c;
     line-height: 0.6em;
+    height:0px;
 }
 .create::after{
     position: absolute;
@@ -439,6 +442,7 @@ input:focus-visible{
     font-family: 'twayair';
     color: #7c7c7c;
     line-height: 0.6em;
+    height:0px;
 }
  
 .create .container{
@@ -454,24 +458,85 @@ input:focus-visible{
 .create .container .form .form-group{    
     display: flex;
     justify-content: space-evenly;
-    width: 70%;
+    width: 80%;
     margin: 1em auto;
     align-items: center;
 }
+.create .container .form .form-group.guide{    
+    font-family: 'SCoreDream';
+    text-align: right;
+    width: calc(80% - 160px);
+    justify-content: flex-end;
+}    
 
 .create .container .form .form-group .input-title{
     font-family: 'SCoreDream';
     font-size: 1.5em;
     letter-spacing: 0.1em;
-    word-spacing: 4.8em;
+    word-spacing: 2.8em;
 }
 
 .create .container .form .form-group .input-box{
-    width: 50%;        
+    width: 52%;        
 }
 
-.create .container .form button{
-    background: #56a351;
+.create .container .form .point-setting .point-title{
+    font-family: 'SCoreDream';
+    font-size: 1.5em;
+}
+
+.create .container .form .point-setting .point-btn{
+    width: 52%;   
+    display: flex;
+    justify-content: space-between;
+}
+.create .container .form .point-setting .point-btn > button{
+    font-family: 'SCoreDream';
+    font-size: 1.15em;
+    border: 0;
+    width: 180px;    
+    background: #c7c7c7;
+    padding: 0.2em;
+    cursor: pointer;
+}
+
+.create .container .form .point-setting .point-btn > button:hover{
+    background: #a3a3a3;
+}
+.pointModal .modal-container .modal-overlay{
+    background: #000;
+}
+.pointModal .modal-container .modal-content .modal-body {
+    width: 80%;
+    margin: 0 auto;
+}
+.pointModal .modal-container .modal-content .modal-body .point-title{
+    font-family: 'SCoreDream';
+    font-size: 1.15em;
+    margin: 0.5em 0 0;
+}
+.pointModal .modal-container .modal-content .modal-body .input-box{
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: space-between;
+    height: 100%;
+}
+.pointModal .modal-container .modal-content .modal-body .input-box input{
+    width: 30%;
+}
+.pointModal .modal-container .modal-content .modal-body .btn-box button {
+    margin: 0 0 25px 0;
+}
+
+.create .container .form .btn-box{
+    display: flex;
+    width: 35%;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+.create .btn-box button{
+    background: #016CB2;
     border: none;
     cursor: pointer;
     padding: 0.5em 2em;
@@ -479,13 +544,16 @@ input:focus-visible{
     font-size: 1em;
     margin: 0.5em 0 0;
 }
-.create .container .form .btn-border{    
+.create .btn-box .main{
+    background: #D91216;
+}
+.create .btn-box .btn-border{    
     color: #fff;
     transition: color 0.25s 0.0833333333s;
     position: relative;
 }
-.create .container .form .btn-border::before,
-.create .container .form .btn-border::after{
+.create .btn-box .btn-border::before,
+.create .btn-box .btn-border::after{
     border: 0 solid transparent;
     box-sizing: border-box;
     content: "";
@@ -496,37 +564,66 @@ input:focus-visible{
     bottom: 0;
     right: 0;
 }
-.create .container .form .btn-border::before{
+.create .btn-box .btn-border::before{
     border-bottom-width: 2px;
     border-left-width: 2px;
 }
-.create .container .form .btn-border::after{
+.create .btn-box .btn-border::after{
     border-top-width: 2px;
     border-right-width: 2px;
 }
 
 /* 버튼 호버효과 */
-.create .container .form .btn-border:hover{
-    color: #56a351;    
+.create .btn-box .btn-border:hover{
+    color: #016CB2;    
     background: none;
     font-weight: 500;
 }
-
-.create .container .form .btn-border:hover::before,
-.create .container .form .btn-border:hover::after {
-    border-color: #56a351;
+.create .btn-box .btn-border.main:hover{
+    color: #D91216;
+}
+.create .btn-box .btn-border:hover::before,
+.create .btn-box .btn-border:hover::after {
+    border-color: #016CB2;
     transition: border-color 0s, width 0.25s, height 0.25s;
     width: 100%;
     height: 100%;
 }
-.create .container .form .btn-border:hover::before {
+.create .btn-box .btn-border.main:hover::before,
+.create .btn-box .btn-border.main:hover::after{
+    border-color: #D91216;
+}
+.create .btn-box .btn-border:hover::before {
     transition-delay: 0s, 0s, 0.25s;
 }
-.create .container .form .btn-border:hover::after {
+.create .btn-box .btn-border:hover::after {
     transition-delay: 0s, 0.25s, 0s;
 }
 
 /* 선수등록부분 시작 */
+.register{
+    min-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    overflow: hidden;
+}
+.register > .title{
+    color: #fff;
+    font-size: 50px;
+    font-family: 'EliceDigitalBaeum_Bold';
+    line-height: 1.2;
+    margin: 0 0 0.7em;
+}
+.register .container .form .form-group.guide{    
+    font-family: 'SCoreDream';
+    text-align: right;
+    width: calc(80% - 150px);
+    justify-content: flex-end;
+    color: #D91216;
+    font-weight: bold;
+}    
 .register .container .form .form-group .input-title{
     letter-spacing: 0.1em;
     text-align: left;
@@ -538,7 +635,7 @@ input:focus-visible{
 .register .container .form .form-group .tier-option{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
 }
 .register .container .form .form-group .tier-option .tier-img{
@@ -577,38 +674,127 @@ input:focus-visible{
 
 /* 경매참가 페이지 */
 .join{
+    min-width: 1400px;
     width:85%;
     margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 .join .title{
     color: #fff;
     font-size: 50px;
     font-family: 'EliceDigitalBaeum_Bold';
     line-height: 1.2;
-    margin: 0.5em 0 1em;
+    margin: 0;
 }
 .join .container{    
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;;
     height: 70vh;
 }
 .join .auction{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 30%;
     background: rgba(255,255,255,0.5);
+    padding: 15px 0;
 }
 
-.join .auction .palyer-info{
+.join .auction .palyer{
     background: #fff;
-    height: 25%;
-    margin: 1em 1.5em;
+    height: 35%;
+    margin: 0 20px;
+    font-family: "SCoreDream";
+    font-size: 16px;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0 20px;
+    flex-wrap: wrap;
+    align-items: center;
 }
-.join .auction .chat-box{
-    height: 50%;
+.join .auction .palyer .player-info{    
+    max-width: 140px;
+    width: 100%;
+    text-align: center;
+}
+.join .auction .palyer .player-info span{
+    max-width: 85px;
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+    font-size: 20px;
+}
+.join .auction .palyer .player-info .tier-img,
+.join .auction .palyer .player-info .position-img,
+.join .auction .palyer .player-info .champion-img{
+    height: 4vh;
+}
+.join .auction .palyer .player-info .position-img{
+    margin: 0 0 0 5px;
+}
+.join .auction .palyer .player-info .img-box{
+    display: flex;
+    justify-content: space-between;
+}
+
+.join .auction .chat-container{
+    height: 40%;
     background: rgba(0,0,0,0.5);
     padding: 0 1.5em;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 15px 0;
+}
+.join .auction .chat-container .chat-box{
+    overflow: hidden;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    padding: 0.5em 0 0.5em 0.5em;
+    color: #fff;
+    box-sizing: border-box;
+}
+.join .auction .chat-container .chat-box::-webkit-scrollbar{
+    width: 8px;
+}
+.join .auction .chat-container .chat-box::-webkit-scrollbar-thumb{
+    background: #6a6a6a;
+}
+.join .auction .chat-container .chat-box::-webkit-scrollba-track {
+    background: rgba(0, 0, 0, 0); 
+}
+
+.join .auction .chat-container .chat-box .message{
+    font-family: "SCoreDream";
+    font-size: 18px;
+    font-weight: 100;
+    word-break: keep-all;
+}
+.join .auction .chat-container .auction-info{
+    display: flex;    
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;  
+    align-content: center;
+    justify-content: center;
+    width: 35%;
+    height: 50%;
+    background: #fff;    
+    font-family: 'EliceDigitalBaeum_Bold';
+    font-size: 18px;
 }
 .join .auction .auction-form{
-    margin: 1em 1.5em;
+    margin: 0 20px;
+}
+.join .auction .auction-form input{
+    border-radius: 0;
+    padding: 0.35em 0.7em;
+    margin: 0 0 10px 0;
 }
 
 .join .auction .auction-form input:focus-visible{
@@ -620,46 +806,96 @@ input:focus-visible{
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin: 0.5em 0 0 ;
 }
+
 .join .auction .auction-form .btn-box > button{
     font-family: "SCoreDream";
     font-weight: 600;
     font-size: 20px;
     min-width: 70px;
-    height: 5vh;
+    height: 4vh;
     border: 0;
     cursor: pointer;
-    background: #fffadf;
+    background: #fff;
 }
-.join .auction .auction-form .btn-box > button.submit{
+.join .auction .auction-form .btn-box > button:hover{
+    background: #e2e2e2;
+}
+
+.join .auction .auction-form .admin-form .admin-btn{
+    justify-content: flex-end;
+}
+.join .auction .auction-form .admin-form input{
+    margin: 10px 0;
+}
+.join .auction .auction-form .admin-form .admin-btn > button{
+    padding: 0 1em;    
+    font-size: 16px;
+    height: 4vh;
+}
+.join .auction .auction-form .admin-form .admin-btn > .start,
+.join .auction .auction-form .admin-form .admin-btn > .pause{
+    margin: 0 0 0 1em;
+}
+.join .auction .auction-form .admin-form .admin-btn > .start,
+.join .auction .auction-form .btn-box > button.buy{
     color: #fff;
     background: #9147ff;
 }
-.join .auction .auction-form .btn-box > button:hover{
-    background: #ede8cd;
-}
-.join .auction .auction-form .btn-box > button.submit:hover{
+.join .auction .auction-form .admin-btn > .start:hover,
+.join .auction .auction-form .btn-box > button.buy:hover{
     background: #6D36BF;
 }
 
+.join .auction .auction-form .admin-form .admin-btn > .pause{
+    background: #FEDD14;
+}
 
 .join .team{
-    width: 60%;    
+    width: 42%;    
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.join .team .player-list, .join .team .team-list{
+.join .team .player-board, .join .team .team-board{
     background: rgba(255,255,255,0.5);
     height:45%;
     overflow: hidden;
     overflow-y: auto;
     text-align: left;
-    padding-bottom: 1em;
 }
-.join .team .player-list .player{
+
+.join .team .player-board::-webkit-scrollbar,
+.join .team .team-board::-webkit-scrollbar{
+    width: 8px;
+}
+
+.join .team .player-board::-webkit-scrollbar-thumb,
+.join .team .team-board::-webkit-scrollbar-thumb {
+    background: #6a6a6a;
+}
+
+.join .team .player-board::-webkit-scrollbar-track,
+.join .team .team-board::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0); 
+}
+
+.join .team .team-list{
+    display: flex;
+    align-items: flex-start;
+}
+
+.join .team .team-board .team-list .leader .point{
+    font-size: 15px;
+}
+.join .team .team-board .team-list .player{
+    font-size: 16px;
+}
+.join .team .team-board .team-list .leader{
+    font-size: 18px;
+}
+.join .team .player-board .player{
     display:inline-block;
     font-family: "SCoreDream";
     font-weight: 600;
@@ -667,6 +903,6 @@ input:focus-visible{
     text-align: center;
     padding: 0 1em 0;
 }
-.join .team .player-list .player .emoji{
+.join .team .player-board .player .emoji{
     font-size: 70px;
 }

@@ -2,13 +2,16 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import ModalFrame from '../utils/ModalFrame'
+import Swal from 'sweetalert2'
+import Modal from './component/Modal'
 import { loginInfoAtom } from './State'
 
 export default function Home() {
 
     const [loginInfo, setLoginInfo] = useRecoilState(loginInfoAtom)    
     const [modalState, setModalState] = useState(false)
+    const [targetPage, setTargetPage] = useState('')
+    const [roomCode,setRoomCode] = useState('')
     const navigator = useNavigate();
     
     useEffect(() => {
@@ -32,20 +35,47 @@ export default function Home() {
     const btnClicked = (data) => {
         if (!loginInfo.token) {
             console.log(loginInfo)
-            alert('로그인 후 이용해주세요!')
+            Swal.fire('경고!',"로그인 후 이용해주세요!",'error')
+
             navigator('/login')
         }else {
             navigator(data)
         }
     }
 
-    const openModal = () =>{
+    const openModal = (data) =>{
+        setTargetPage(data)
         setModalState(true)
     }
 
     const closeModal = (e) =>{
         e.preventDefault()
         setModalState(false)
+    }
+    
+    const getRoomCode = (e) =>{
+        setRoomCode(e.target.value)
+    }
+
+    const postRoomCode = () => {
+        axios.get('http://119.192.243.12:13031/api/auction/validate', {
+            params: {
+                auctionId : roomCode,
+            }
+        }).then(response => {
+            console.log("It's work!")
+            console.log(response)
+            console.log(response.data.data.auctionOwnerName)
+            navigator(targetPage,{
+                state:{
+                    auctionId: roomCode,
+                    auctionOwnerName: response.data.data.auctionOwnerName
+                }
+            })
+        }).catch(error => {
+            Swal.fire('경고!',"코드를 다시 한 번 확인해주세요!",'error')
+            
+        })
     }
 
 
@@ -57,14 +87,18 @@ export default function Home() {
                     경매장 생성
                 </button>
                
-                <button className="btn btn-border" onClick={() => {btnClicked('/register-auction')}}>
+                <button className="btn btn-border" onClick={() => {openModal('/register-auction')}}>
                     선수 등록
                 </button>
 
-                <button className="btn btn-border" onClick={() => { openModal()}}>
+                <button className="btn btn-border" onClick={() => {openModal('/join-auction')}}>
                     경매 참가
                 </button>
-                <ModalFrame state={modalState} closeModal={closeModal} />
+                <Modal isOpen={modalState} closeModal={closeModal}>
+                    <h2>방 코드를 입력해주세요!</h2>
+                    <input placeholder="스트리머분께 제공 받은 코드를 입력해주세요!" name="roomcode" onChange={getRoomCode}/>
+                    <button type="button" className="codeBtn" onClick={()=>{postRoomCode()}}>완료</button>
+                </Modal>
 
             </div>
         </div>
