@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
-import axios from 'axios'
 import { loginInfoAtom } from './State';
 import { useRecoilValue } from 'recoil';
 import { ranktier } from '../utils/RankImg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { requestChampData } from '../utils/DataDragonUtils';
 import Swal from 'sweetalert2';
+import axiosInstance from '../utils/AxiosHandler'
 
 const POSITION_IMG_PATH = "/img/position";
 export default function RegisterAuction() {
@@ -26,7 +26,6 @@ export default function RegisterAuction() {
 	});
 
 	const updateUserInfo = (e) => {
-		console.log(e)
 		setUserInfo({
 			...userInfo,
 			[e.target.name] : e.target.value
@@ -47,7 +46,7 @@ export default function RegisterAuction() {
 		placeholder: (provided) => ({
 			...provided,
 			fontSize: '15px',
-			fontFamily: 'SCoreDream',
+			fontFamily: 'LeferiPoint-WhiteA',
 			textAlign: 'left',
 		})
 	}
@@ -92,7 +91,7 @@ export default function RegisterAuction() {
 		placeholder: (provided) => ({
 			...provided,
 			fontSize: '15px',
-			fontFamily: 'SCoreDream',
+			fontFamily: 'LeferiPoint-WhiteA',
 			textAlign: 'left',
 		}),
 		menuList: (provided) => ({
@@ -156,11 +155,10 @@ export default function RegisterAuction() {
 		const championNames = userInfo.userMost.map((championName) => (
 			championName.value
 		))
-		console.log(championNames)
 		
 		if ((userInfo.userName) && (userInfo.userTier || userInfo.userTierNum) && (userInfo.userPosition) && (userInfo.userSubPosition) && (userInfo.userMost.length == 3)) {
 			
-		axios.post('http://119.192.243.12:13031/api/auction/register',{
+		axiosInstance.post(`${process.env.REACT_APP_API_URL}/auction/register`,{
 			// 보내려는 데이터 정보
 			lolName : userInfo.userName,
 			highestTier : userInfo.userTier + userInfo.userTierNum ,
@@ -171,24 +169,13 @@ export default function RegisterAuction() {
 			auctionId : roomInfo.auctionId,
 			profileImg : parseInt(Math.random() * 9)
 		}).then((response) => {
-			console.log("It's work!")
-			console.log(response)
-            // TODO: 신청이 완료되었습니다! 띄워주기 => 다시 메인으로 보내기
 			Swal.fire('성공!',"등록이 완료되었습니다!",'success')
 			
 			navigator('/')
-		}).catch((error) =>{
-			if (error.response.data.errorCode === "1002") {
-				Swal.fire('경고!',"이미 등록된 계정입니다.",'error')
-				navigator('/')
-			}
 		})
 		
 	}
 	}
-
-
-	console.log(userInfo)
 
 	return (
 		<div className="register">

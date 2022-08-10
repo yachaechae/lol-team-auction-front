@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil'
 import Swal from 'sweetalert2'
 import Modal from './component/Modal'
 import { loginInfoAtom } from './State'
+import axiosInstance from '../utils/AxiosHandler'
 
 export default function Home() {
 
@@ -21,20 +22,17 @@ export default function Home() {
             Authorization : `Bearer ${loginInfo.token}`
         }
         }).then((result)=>{
-            console.log(result)
             setLoginInfo({
                 ...loginInfo,
                 twitchName : result.data.preferred_username,
             })
         }).catch((error)=>{
-            console.log(error.response.status)
         }) 
         
     }, [])
 
     const btnClicked = (data) => {
         if (!loginInfo.token) {
-            console.log(loginInfo)
             Swal.fire('경고!',"로그인 후 이용해주세요!",'error')
 
             navigator('/login')
@@ -58,24 +56,27 @@ export default function Home() {
     }
 
     const postRoomCode = () => {
-        axios.get('http://119.192.243.12:13031/api/auction/validate', {
+        const checkCode = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi
+        if (!checkCode.test(roomCode)) {
+            Swal.fire('경고!',"코드를 다시 한 번 확인해주세요!",'error')
+            return 
+        }
+        axiosInstance.get('/auction/validate', {
             params: {
                 auctionId : roomCode,
             }
         }).then(response => {
-            console.log("It's work!")
-            console.log(response)
-            console.log(response.data.data.auctionOwnerName)
             navigator(targetPage,{
                 state:{
                     auctionId: roomCode,
                     auctionOwnerName: response.data.data.auctionOwnerName
                 }
             })
-        }).catch(error => {
-            Swal.fire('경고!',"코드를 다시 한 번 확인해주세요!",'error')
-            
         })
+        // .catch(error => {
+        //     Swal.fire('경고!',"코드를 다시 한 번 확인해주세요!",'error')
+            
+        // })
     }
 
 

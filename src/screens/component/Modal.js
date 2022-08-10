@@ -1,7 +1,5 @@
-import axios from 'axios'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+
 
 export default function Modal({isOpen, closeModal, children}) {
 

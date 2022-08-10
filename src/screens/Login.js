@@ -4,7 +4,6 @@ import { useRecoilState } from 'recoil'
 import { loginInfoAtom } from './State'
 
 export default function Login() {
-    
     const [loginInfo, setLoginInfo] = useRecoilState(loginInfoAtom)
     const navigator = useNavigate()
 
@@ -25,10 +24,10 @@ export default function Login() {
     }, [loginInfo])
     
     const login = () =>{
-        window.open('https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=nwt477t3f1o4vh15qf3pdqyle90c4d&redirect_uri=http://localhost:3000/login&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls&state=c3ab8aa609ea11e793ae92361f002671','_self')
+        window.open(`https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=nwt477t3f1o4vh15qf3pdqyle90c4d&redirect_uri=${process.env.REACT_APP_LOGIN_URL}/login&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls&state=c3ab8aa609ea11e793ae92361f002671`,'_self')
 
     }
-
+    
   return (
     <div>
         <a className="login-btn" onClick={() =>{login()}}>

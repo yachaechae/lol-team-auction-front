@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil';
 import Timer from './component/Timer';
 import TeamLeaderModal from './component/TeamLeaderModal';
+import KickPlayerModal from './component/KickPlayerModal';
 import { loginInfoAtom } from './State';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import axios from 'axios';
 import { requestChampData } from '../utils/DataDragonUtils';
 import ErrorAlert from '../error/ErrorCodeHandler';
 
@@ -28,6 +27,7 @@ export default function JoinAuction() {
     const { auctionId, auctionOwnerName } = location.state ?? {}
     const loginName = useRecoilValue(loginInfoAtom)
     const [modalState, setModalState] = useState(false)
+    const [kickModal, setKickModal] = useState(false)
 
     const [point, setPoint] = useState()
     const [playerInfo, setPlayerInfo] = useState({})
@@ -37,7 +37,7 @@ export default function JoinAuction() {
     const [time, setTime] = useState(0)
     const [bidPoint, setBidPoint] = useState()
     const scroll = useRef()
-    
+
     const openModal = () => {
         setModalState(true)
     }
@@ -45,6 +45,14 @@ export default function JoinAuction() {
     const closeModal = (e) => {
         e.preventDefault()
         setModalState(false)
+    }
+    const openKickModal = () => {
+        setKickModal(true)
+    }
+
+    const closeKickModal = (e) => {
+        e.preventDefault()
+        setKickModal(false)
     }
 
     const waitingPlayer = playerList && playerList.map((player, index) => {
@@ -54,6 +62,10 @@ export default function JoinAuction() {
                     {emojiList[player.profileImg]}
                 </div>
                 {player.twitchName}
+                <div className="tier-img">
+                    <img className="position-img" src={`${POSITION_IMG_PATH}/Position_${player.highestTier.replace(/[0-9]/g, "")}-${player?.primaryLane}.png`} />
+                    <img className="position-img" src={`${POSITION_IMG_PATH}/Position_${player.highestTier.replace(/[0-9]/g, "")}-${player?.secondaryLane}.png`} />
+                </div>
             </div>
         )
     })
@@ -69,14 +81,14 @@ export default function JoinAuction() {
                     <div className="point">{leader.teamPoint}</div>
                 </div>
                 {
-                    leader.playerList && leader.playerList.map((player, index) => {
-                        if(player.playerType === "GENERAL"){
+                    leader.playerList && leader.playerList.map((player) => {
+                        if (player.playerType === "GENERAL") {
                             return (
                                 <div className="player">
                                     <div className="emoji">
                                         {emojiList[player.profileImg]}
                                     </div>
-                                    {player.twitchName}
+                                    {player.twitchName}<br />
                                 </div>
                             )
                         }
@@ -87,22 +99,19 @@ export default function JoinAuction() {
     })
 
     useEffect(() => {
-        sockJS = new SockJS("http://119.192.243.12:13031/ws");
+        sockJS = new SockJS(`${process.env.REACT_APP_SOCKET_URL}/ws`);
         stompClient = Stomp.over(sockJS);
 
         stompClient.connect({ user: loginName.twitchName, auctionId: auctionId }, async () => {
             version = (await requestChampData()).data.version
             stompClient.subscribe('/user/sub/info', (data) => {
-                console.log(JSON.parse(data.body))
                 setLeaderInfo(JSON.parse(data.body).team)
                 setPlayerList(JSON.parse(data.body).waitingPlayer)
                 setPlayerInfo(JSON.parse(data.body).processingInfo?.auctionPlayer)
                 setBidPoint(JSON.parse(data.body).processingInfo?.biddingPoint)
             })
 
-            console.log(`/sub/auction/${auctionId}/info`)
             stompClient.subscribe(`/sub/auction/${auctionId}/info`, (data) => {
-                console.log(JSON.parse(data.body))
                 setLeaderInfo(JSON.parse(data.body).message.team)
                 setPlayerList(JSON.parse(data.body).message.waitingPlayer)
                 setPlayerInfo(JSON.parse(data.body).message.processingInfo?.auctionPlayer)
@@ -115,7 +124,7 @@ export default function JoinAuction() {
                 if (JSON.parse(data.body).type === "AUCTION_PREPARE") {
                     setTime(5)
                     setPoint(0)
-                }else if (JSON.parse(data.body).type === "AUCTION_START" || JSON.parse(data.body).type === "BID_ACCEPTED"){
+                } else if (JSON.parse(data.body).type === "AUCTION_START" || JSON.parse(data.body).type === "BID_ACCEPTED") {
                     setTime(15)
                 }
 
@@ -125,18 +134,15 @@ export default function JoinAuction() {
             })
 
             stompClient.subscribe('/user/sub/errors', (data) => {
-                console.log(data)
                 ErrorAlert(JSON.parse(data.body))
             })
             stompClient.send('/pub/auction/join', {}, JSON.stringify({ auctionId: auctionId, userName: loginName.twitchName }))
         }, (err) => {
-            console.log(err)
             navigator('/login')
         })
 
 
         return () => {
-            console.log("연결종료")
             stompClient.disconnect();
             sockJS.close();
         }
@@ -150,20 +156,18 @@ export default function JoinAuction() {
 
     useEffect(() => {
         chatScroll()
-    },[message])
+    }, [message])
 
-    const chatScroll = () =>{
-        const {scrollHeight, clientHeight} = scroll.current;
+    const chatScroll = () => {
+        const { scrollHeight, clientHeight } = scroll.current;
         scroll.current.scrollTop = scrollHeight - clientHeight
     }
 
     const auctionStart = () => {
-        console.log("경매를 시작합니다!")
         stompClient.send('/pub/auction/start', {}, JSON.stringify({ auctionId: auctionId }))
     }
-    
+
     const auctionPause = () => {
-        console.log("경매를 정지합니다!")
         stompClient.send('/pub/auction/pause', {}, JSON.stringify({ auctionId: auctionId }))
 
     }
@@ -182,16 +186,16 @@ export default function JoinAuction() {
     const plusBtn = (e) => {
         if (point < bidPoint) {
             setPoint(Number(bidPoint) + Number(e.target.value))
-        }else{
+        } else {
             setPoint(Number(point) + Number(e.target.value))
         }
     }
-    
+
 
     const bid = () => {
-        console.log(point)
         stompClient.send('/pub/auction/bid', {}, JSON.stringify({ auctionId: auctionId, bidPoint: point }))
     }
+
 
     return (
         <div className="join">
@@ -209,7 +213,8 @@ export default function JoinAuction() {
                             <span>티어 정보</span>
                             {playerInfo?.highestTier &&
                                 <>
-                                    <img className="tier-img" src={`${TIER_IMG_PATH}/${playerInfo?.highestTier?.slice(0, -1)}.png`} alt={playerInfo?.highestTier} />{playerList?.userTierNum}
+                                    <img className="tier-img" src={`${TIER_IMG_PATH}/${playerInfo?.highestTier.replace(/[0-9]/g, "")}.png`} alt={playerInfo?.highestTier.replace(/[0-9]/g, "")} />
+                                    {playerInfo?.highestTier.replace(/[^0-9]/g, "")}
                                 </>
                             }
                         </div>
@@ -223,13 +228,13 @@ export default function JoinAuction() {
                         <div className="player-info">
                             <span>주 라인</span>
                             {!!playerInfo?.highestTier &&
-                                <img className="position-img" src={`${POSITION_IMG_PATH}/Position_${playerInfo?.highestTier?.slice(0, -1)}-${playerInfo?.primaryLane}.png`} />
+                                <img className="position-img" src={`${POSITION_IMG_PATH}/Position_${playerInfo?.highestTier.replace(/[0-9]/g, "")}-${playerInfo?.primaryLane}.png`} />
                             }
                         </div>
                         <div className="player-info">
                             <span>부 라인</span>
                             {!!playerInfo?.highestTier &&
-                                <img className="position-img" src={`${POSITION_IMG_PATH}/Position_${playerInfo?.highestTier?.slice(0, -1)}-${playerInfo?.secondaryLane}.png`} />
+                                <img className="position-img" src={`${POSITION_IMG_PATH}/Position_${playerInfo?.highestTier.replace(/[0-9]/g, "")}-${playerInfo?.secondaryLane}.png`} />
                             }
                         </div>
 
@@ -252,6 +257,8 @@ export default function JoinAuction() {
                         {auctionOwnerName === loginName.twitchName ?
                             <div className="admin-form">
                                 <div className="btn-box admin-btn">
+                                    <button onClick={openKickModal}>강퇴</button>
+                                    <KickPlayerModal isOpen={kickModal} closeModal={closeKickModal}/>              
                                     <button onClick={openModal}>팀장 선정</button>
                                     <TeamLeaderModal data={playerList} isOpen={modalState} closeModal={closeModal} />
                                     <button className="pause" onClick={auctionPause}>일시 정지</button>

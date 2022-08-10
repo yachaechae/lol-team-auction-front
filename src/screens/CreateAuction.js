@@ -1,10 +1,11 @@
-import axios from 'axios';
+
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import Swal from 'sweetalert2';
 import Modal from './component/Modal';
 import { loginInfoAtom } from './State';
+import axiosInstance from '../utils/AxiosHandler'
 
 
 const pointKeys = [
@@ -63,16 +64,16 @@ export default function CreateAuction() {
             if (!auctionInfo[pointKeys[index]]) {
                 return false
             }
-            return true
         }
+        return true
     }
     const validateMinPointInput = () => {
         for (let index = 0; index < minPointKeys.length; index++) {
             if (!auctionInfo[minPointKeys[index]]) {
                 return false
             }
-            return true
         }
+        return true
     }
     const updateAuctionInfo = (e) => {
         setAuctionInfo({
@@ -91,33 +92,34 @@ export default function CreateAuction() {
 
     const closeModal = (e) => {
         e.preventDefault()
-        console.log(validatePointInput())
-        if (validatePointInput()) {
-            setIsOpen(false)
-        } else {
-            Swal.fire('경고!', "포인트를 다 입력했는지 확인해주세요", 'warning')
-        }
+        // if (validatePointInput()) {
+        //     setIsOpen(false)
+        // } else {
+        //     Swal.fire('경고!', "포인트를 다 입력했는지 확인해주세요", 'warning')
+        // }
+        setIsOpen(false)
     }
     const closeModalMinPoint = (e) => {
         e.preventDefault()
-        console.log(validateMinPointInput())
-        if (validateMinPointInput()) {
-            setIsOpenMinPoint(false)
-        } else {
-            Swal.fire('경고!', "포인트를 다 입력했는지 확인해주세요", 'warning')
-        }
+        // if (validateMinPointInput()) {
+        //     setIsOpenMinPoint(false)
+        // } else {
+        //     Swal.fire('경고!', "포인트를 다 입력했는지 확인해주세요", 'warning')
+        // }
+        setIsOpenMinPoint(false)
     }
+
     const postAuctionInfo = () => {
         if (!auctionInfo.maxTeam) {
             Swal.fire('경고!', "팀 수를 꼭 입력해주세요!", "warning")
             return;
         }
         if (!(validatePointInput() && validateMinPointInput())) {
-            Swal.fire('경고!', "포인트를 다시 한 번 확인해주세요!", "warning")
+            Swal.fire('경고!', "포인트를 입력이 다 되었는지 확인해주세요!", "warning")
             return;
         }
 
-        axios.post('http://119.192.243.12:13031/api/auction', {
+        axiosInstance.post(`/auction`, {
             ...auctionInfo,
             ownerToken: loginName.token
         }).then(response => {
@@ -148,7 +150,7 @@ export default function CreateAuction() {
                     <div className="form-group">
                         <div className="input-title">팀 수</div>
                         <div className="input-box">
-                            <input type="number" placeholder="숫자만 입력해주세요!" name="maxTeam" onChange={updateAuctionInfo}></input>
+                            <input type="number" placeholder="숫자만 입력해주세요!" name="maxTeam" onChange={updateAuctionInfo} pattern="[0-9]+"></input>
                         </div>
                     </div>
                     <div className="point-setting form-group">

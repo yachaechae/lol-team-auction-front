@@ -16,11 +16,29 @@
     font-weight: normal;
     font-style: normal;
 }
-@import url('https://webfontworld.github.io/SCoreDream/SCoreDream.css');
+@font-face {
+    font-family: 'LeferiPoint-WhiteObliqueA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-WhiteObliqueA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LeferiPoint-WhiteA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-WhiteA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LeferiBaseType-BoldA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiBaseType-BoldA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 /* input css 설정 */
 input{
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 1.2em;
     width: 100%;    
     border-radius: 5px;
@@ -30,7 +48,7 @@ input{
 }
 
 input::placeholder{
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 15px;
 }
 
@@ -79,7 +97,7 @@ input:focus-visible{
     text-decoration: none;
     position: relative;
     cursor: pointer;
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
 }
 .login-btn__text {
     color: #DAB644;
@@ -208,7 +226,7 @@ input:focus-visible{
     border: none;
     cursor: pointer;
     padding: 0.5em 1.2em;
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     text-decoration: none;
 }
 
@@ -363,7 +381,7 @@ input:focus-visible{
     border: none;
     cursor: pointer;
     padding: 0.5em 2em;
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 1em;
     margin: 0.5em 0 0;
 }
@@ -463,14 +481,14 @@ input:focus-visible{
     align-items: center;
 }
 .create .container .form .form-group.guide{    
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     text-align: right;
     width: calc(80% - 160px);
     justify-content: flex-end;
 }    
 
 .create .container .form .form-group .input-title{
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 1.5em;
     letter-spacing: 0.1em;
     word-spacing: 2.8em;
@@ -481,7 +499,7 @@ input:focus-visible{
 }
 
 .create .container .form .point-setting .point-title{
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 1.5em;
 }
 
@@ -491,7 +509,7 @@ input:focus-visible{
     justify-content: space-between;
 }
 .create .container .form .point-setting .point-btn > button{
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 1.15em;
     border: 0;
     width: 180px;    
@@ -504,14 +522,14 @@ input:focus-visible{
     background: #a3a3a3;
 }
 .pointModal .modal-container .modal-overlay{
-    background: #000;
+    background: rgba(0,0,0,0.5);
 }
 .pointModal .modal-container .modal-content .modal-body {
     width: 80%;
     margin: 0 auto;
 }
 .pointModal .modal-container .modal-content .modal-body .point-title{
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 1.15em;
     margin: 0.5em 0 0;
 }
@@ -540,7 +558,7 @@ input:focus-visible{
     border: none;
     cursor: pointer;
     padding: 0.5em 2em;
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 1em;
     margin: 0.5em 0 0;
 }
@@ -617,7 +635,7 @@ input:focus-visible{
     margin: 0 0 0.7em;
 }
 .register .container .form .form-group.guide{    
-    font-family: 'SCoreDream';
+    font-family: 'LeferiBaseType-BoldA';
     text-align: right;
     width: calc(80% - 150px);
     justify-content: flex-end;
@@ -644,7 +662,7 @@ input:focus-visible{
 .register .container .form .form-group .tier-option .tier-radio {
     display: flex;
     align-items: center;
-    font-family: 'SCoreDream';
+    font-family: 'LeferiPoint-WhiteA';
 }
 .register .container .form .form-group .tier-option .tier-radio input[type="radio"]{
     width: auto;    
@@ -707,7 +725,7 @@ input:focus-visible{
     background: #fff;
     height: 35%;
     margin: 0 20px;
-    font-family: "SCoreDream";
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 16px;
     display: flex;
     justify-content: space-evenly;
@@ -770,7 +788,7 @@ input:focus-visible{
 }
 
 .join .auction .chat-container .chat-box .message{
-    font-family: "SCoreDream";
+    font-family: 'LeferiPoint-WhiteObliqueA';
     font-size: 18px;
     font-weight: 100;
     word-break: keep-all;
@@ -809,8 +827,7 @@ input:focus-visible{
 }
 
 .join .auction .auction-form .btn-box > button{
-    font-family: "SCoreDream";
-    font-weight: 600;
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 20px;
     min-width: 70px;
     height: 4vh;
@@ -823,20 +840,17 @@ input:focus-visible{
 }
 
 .join .auction .auction-form .admin-form .admin-btn{
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 .join .auction .auction-form .admin-form input{
     margin: 10px 0;
 }
 .join .auction .auction-form .admin-form .admin-btn > button{
-    padding: 0 1em;    
+    padding: 0 0.7em;    
     font-size: 16px;
     height: 4vh;
 }
-.join .auction .auction-form .admin-form .admin-btn > .start,
-.join .auction .auction-form .admin-form .admin-btn > .pause{
-    margin: 0 0 0 1em;
-}
+
 .join .auction .auction-form .admin-form .admin-btn > .start,
 .join .auction .auction-form .btn-box > button.buy{
     color: #fff;
@@ -897,12 +911,18 @@ input:focus-visible{
 }
 .join .team .player-board .player{
     display:inline-block;
-    font-family: "SCoreDream";
-    font-weight: 600;
+    font-family: 'LeferiPoint-WhiteA';
     font-size: 18px;
     text-align: center;
     padding: 0 1em 0;
+    width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .join .team .player-board .player .emoji{
     font-size: 70px;
+}
+.join .team .player-board .player .tier-img img{
+    width:30px;
 }

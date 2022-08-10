@@ -12,8 +12,6 @@ export default function LoginRoute() {
     const navigator = useNavigate()
     
     useEffect(() => {
-        console.log(!loginInfo.token)
-        console.log(location.list)
         if(location.pathname === '/login'){
         }
         else if (!loginInfo.token) {            
