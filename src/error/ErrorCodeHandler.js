@@ -26,12 +26,13 @@ const errorList = {
     "1022": "입찰은 5포인트 단위로 진행해주세요!",
     "1023": "해당 경매는 모집 완료되었습니다!",
     "1024": "관리자만 플레이어를 추방 할 수 있습니다!",
-    "1025": "경매가 시작되었으므로 플레이어를 추방할 수 없습니다!"
+    "1025": "경매가 시작되었으므로 플레이어를 추방할 수 없습니다!",
+    "1026": "팀장만 경매에 참가 할 수 있습니다!",
 }
 
 
-const ErrorAlert = ({errorCode}) =>  {    
-    Swal.fire('경고!',errorList[errorCode],'error')
+const ErrorAlert = (data) =>  {    
+    Swal.fire('경고!',errorList[data],'error')
 }
 
 export default ErrorAlert
