@@ -29,7 +29,7 @@ export default function Login() {
     }
     
   return (
-    <div>
+    <div className="login">
         <a className="login-btn" onClick={() =>{login()}}>
             <span className="login-btn__outline login-btn__outline--tall">
                 <span className="login-btn__line login-btn__line--tall"></span>
