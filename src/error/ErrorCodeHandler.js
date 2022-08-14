@@ -31,8 +31,8 @@ const errorList = {
 }
 
 
-const ErrorAlert = (data) =>  {    
-    Swal.fire('경고!',errorList[data],'error')
+const ErrorAlert = ({errorCode}) =>  {  
+    Swal.fire('경고!',errorList[errorCode],'error')
 }
 
 export default ErrorAlert

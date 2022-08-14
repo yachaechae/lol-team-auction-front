@@ -138,7 +138,7 @@ export default function JoinAuction() {
             })
             stompClient.send('/pub/auction/join', {}, JSON.stringify({ auctionId: auctionId, userName: loginName.twitchName }))
         }, (err) => {
-            ErrorAlert(err.headers.message)
+            ErrorAlert({errorCode : err.headers.message})
             navigator('/login')
         })
 
