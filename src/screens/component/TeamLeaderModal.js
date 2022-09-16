@@ -1,9 +1,10 @@
-import axios from 'axios'
+
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Select from 'react-select'
 import Modal from './Modal'
 import axiosInstance from '../../utils/AxiosHandler'
+import Swal from 'sweetalert2'
 
 export default function TeamLeaderModal({data, isOpen, closeModal}) {    
     const location = useLocation()
@@ -33,6 +34,10 @@ export default function TeamLeaderModal({data, isOpen, closeModal}) {
 			textAlign: 'left',
 		})
 	}
+    console.log(!playerList)
+    if (teamLeader.length > 0 && playerList.length>0) {
+        Swal.fire('주의!','선수등록이 완료 된 후 이용해주세요!','warning')
+    }
     const updateTeamLeader = (data) => {
         const leaderName = data.map((leader) => {
             return (leader.value)
@@ -43,8 +48,10 @@ export default function TeamLeaderModal({data, isOpen, closeModal}) {
         axiosInstance.post(`/auction/update-leader`,{
             auctionId : auctionId,
             leaderTwitchName : teamLeader
-        }).then(response => {
+        }).then( () => {
             closeModal(e)
+        }).catch(err => {
+            console.log(err)
         })
     }
 

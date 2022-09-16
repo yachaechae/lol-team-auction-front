@@ -26,8 +26,7 @@ export default function Home() {
                 ...loginInfo,
                 twitchName : result.data.preferred_username,
             })
-        }).catch((error)=>{
-        }) 
+        })
         
     }, [])
 
@@ -73,10 +72,6 @@ export default function Home() {
                 }
             })
         })
-        // .catch(error => {
-        //     Swal.fire('경고!',"코드를 다시 한 번 확인해주세요!",'error')
-            
-        // })
     }
 
 

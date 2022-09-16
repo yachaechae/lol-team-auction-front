@@ -168,7 +168,7 @@ export default function RegisterAuction() {
 			twitchToken : loginName.token,
 			auctionId : roomInfo.auctionId,
 			profileImg : parseInt(Math.random() * 9)
-		}).then((response) => {
+		}).then(() => {
 			Swal.fire('성공!',"등록이 완료되었습니다!",'success')
 			
 			navigator('/')

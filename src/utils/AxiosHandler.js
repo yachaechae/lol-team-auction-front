@@ -1,4 +1,3 @@
-import react from 'react';
 import axios from 'axios';
 import ErrorCodeHandler from '../error/ErrorCodeHandler';
 

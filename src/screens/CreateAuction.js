@@ -92,20 +92,10 @@ export default function CreateAuction() {
 
     const closeModal = (e) => {
         e.preventDefault()
-        // if (validatePointInput()) {
-        //     setIsOpen(false)
-        // } else {
-        //     Swal.fire('경고!', "포인트를 다 입력했는지 확인해주세요", 'warning')
-        // }
         setIsOpen(false)
     }
     const closeModalMinPoint = (e) => {
         e.preventDefault()
-        // if (validateMinPointInput()) {
-        //     setIsOpenMinPoint(false)
-        // } else {
-        //     Swal.fire('경고!', "포인트를 다 입력했는지 확인해주세요", 'warning')
-        // }
         setIsOpenMinPoint(false)
     }
 

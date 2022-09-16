@@ -31,16 +31,16 @@ export default function Login() {
   return (
     <div className="login">
         <a className="login-btn" onClick={() =>{login()}}>
-            <span className="login-btn__outline login-btn__outline--tall">
-                <span className="login-btn__line login-btn__line--tall"></span>
-                <span className="login-btn__line login-btn__line--flat"></span>
+            <span className="login-btn-outline login-btn-outline--tall">
+                <span className="login-btn-line login-btn-line--tall"></span>
+                <span className="login-btn-line login-btn-line--flat"></span>
             </span>
-            <span className="login-btn__outline login-btn__outline--flat">
-                <span className="login-btn__line login-btn__line--tall"></span>
-                <span className="login-btn__line login-btn__line--flat"></span>
+            <span className="login-btn-outline login-btn-outline--flat">
+                <span className="login-btn-line login-btn-line--tall"></span>
+                <span className="login-btn-line login-btn-line--flat"></span>
             </span>
-            <span className="login-btn__solid"></span>
-            <span className="login-btn__text">Login</span>
+            <span className="login-btn-solid"></span>
+            <span className="login-btn-text">Login</span>
         </a>
 
     </div>

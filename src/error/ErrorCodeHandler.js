@@ -28,10 +28,12 @@ const errorList = {
     "1024": "관리자만 플레이어를 추방 할 수 있습니다!",
     "1025": "경매가 시작되었으므로 플레이어를 추방할 수 없습니다!",
     "1026": "팀장만 경매에 참가 할 수 있습니다!",
+    "1027": "팀장은 강퇴가 불가능합니다!"
 }
 
 
 const ErrorAlert = ({errorCode}) =>  {  
+    console.log(errorCode)
     Swal.fire('경고!',errorList[errorCode],'error')
 }
 

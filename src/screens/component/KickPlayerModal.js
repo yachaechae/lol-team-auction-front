@@ -55,7 +55,7 @@ export default function KickPlayerModal({isOpen, closeModal }) {
                 auctionId: auctionId,
                 playerId : kickPlayer
             }
-        }).then(response => {
+        }).then(() => {
             closeModal(e)
         })
     }
