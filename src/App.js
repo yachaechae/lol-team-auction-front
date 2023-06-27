@@ -10,9 +10,10 @@ import { RecoilRoot } from 'recoil';
 import LoginRoute from './screens/LoginRoute';
 
 function App() {
+	console.log(process.env.PUBLIC_URL)
     return (
 		<RecoilRoot>
-			<BrowserRouter>
+			<BrowserRouter basename={process.env.PUBLIC_URL}>
 				<Routes>
 					<Route element={<LoginRoute/>}>
 						<Route path="/" element={<Home/>} />
